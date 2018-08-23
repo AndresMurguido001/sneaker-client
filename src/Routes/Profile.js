@@ -2,7 +2,8 @@ import React from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import ProfileUser from "../Components/ProfileUser";
-import styled from "styled-components";
+import Upload from "../Components/UploadShoe";
+import { Container } from "semantic-ui-react";
 
 let meQuery = gql`
   query {
@@ -29,6 +30,9 @@ const MyProfile = ({ data: { loading, getUser } }) => {
     <div>
       <h1>{`Welcome To Your Profile ${getUser.firstname}`}</h1>
       <ProfileUser data={getUser} />
+      <Container>
+        <Upload userId={getUser.id} />
+      </Container>
     </div>
   );
 };
