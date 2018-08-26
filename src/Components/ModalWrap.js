@@ -13,8 +13,9 @@ class ModalWrap extends React.Component {
     return (
       <div>
         <Button
-          content="List you shoe"
-          icon="upload"
+          content={this.props.contentDescription}
+          icon={this.props.iconName}
+          style={{ margin: "10px 0" }}
           labelPosition="left"
           onClick={this.show(true)}
         />

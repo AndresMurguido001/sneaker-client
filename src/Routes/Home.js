@@ -6,8 +6,8 @@ import {
   ButtonGroup,
   ButtonOr
 } from "semantic-ui-react";
-import Login from "../Containers/Login";
-import Register from "../Containers/Register";
+import Login from "../Components/Login";
+import Register from "../Components/Register";
 import styled from "styled-components";
 import bg from "../images/mainOneBg.jpg";
 

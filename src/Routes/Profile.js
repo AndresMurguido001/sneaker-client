@@ -1,10 +1,8 @@
 import React from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import ProfileUser from "../Components/ProfileUser";
-import ModalWrap from "../Components/ModalWrap";
+import ProfileUser from "../Containers/ProfileUser";
 import { Container } from "semantic-ui-react";
-import UploadShoe from "../Components/UploadShoe";
 
 let meQuery = gql`
   query {
@@ -13,11 +11,14 @@ let meQuery = gql`
       email
       firstname
       lastname
+      profilePic
       shoes {
         brand
         numberOfLikes
         description
         model
+        size
+        photos
       }
     }
   }
@@ -31,11 +32,6 @@ const MyProfile = ({ data: { loading, getUser } }) => {
     <Container>
       <h1>{`Welcome To Your Profile ${getUser.firstname}`}</h1>
       <ProfileUser data={getUser} />
-      <Container>
-        <ModalWrap>
-          <UploadShoe userId={getUser.id} />
-        </ModalWrap>
-      </Container>
     </Container>
   );
 };

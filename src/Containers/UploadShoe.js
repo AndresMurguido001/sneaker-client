@@ -4,7 +4,7 @@ import axios from "axios";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import moment from "moment";
-import { Button, Form, Header } from "semantic-ui-react";
+import { Button, Form, Header, Message } from "semantic-ui-react";
 import styled from "styled-components";
 
 let PreviewImgWrap = styled.div`
@@ -23,7 +23,8 @@ class Upload extends React.Component {
     brand: "",
     size: 0,
     description: "",
-    loading: false
+    loading: false,
+    errors: {}
   };
 
   onDrop = async filesToUpload => {
@@ -102,7 +103,7 @@ class Upload extends React.Component {
         userId: this.props.userId
       }
     });
-    let { ok } = createShoeResponse.data.createShoe;
+    let { ok, errors } = createShoeResponse.data.createShoe;
     if (ok) {
       // Push to current shoe listing after uploading to s3
       for (let i = 0; i < urlAndSignatures.length; i++) {
@@ -118,10 +119,19 @@ class Upload extends React.Component {
       this.setState({ loading: false });
       console.log("success");
     }
+    if (errors) {
+      let err = {};
+      console.log(errors);
+      errors.forEach(({ path, message }) => {
+        return (err[`${path.toLowerCase()}Error`] = message);
+      });
+      this.setState({ errors: err });
+    }
     //history.push("/shoe/:id")
   };
 
   render() {
+    let { errors } = this.state;
     let selectOptions = [
       { text: "5", key: "5", value: "5" },
       { text: "6", key: "6", value: "6" },
@@ -131,6 +141,10 @@ class Upload extends React.Component {
       { text: "10", key: "10", value: "10" },
       { text: "11", key: "11", value: "11" }
     ];
+    let errList = [];
+    if (errors) {
+      Object.values(errors).map(msg => errList.push(msg));
+    }
     return (
       <Form loading={this.state.loading} style={{ padding: "2rem" }}>
         <Header>List Your Shoes</Header>
@@ -194,6 +208,13 @@ class Upload extends React.Component {
         <Button type="submit" onClick={this.submit}>
           Submit
         </Button>
+        {errList.length > 0 && (
+          <Message
+            error
+            header="There was a problem with your submission"
+            list={errList}
+          />
+        )}
       </Form>
     );
   }
@@ -225,6 +246,10 @@ const createShoeMutation = gql`
       photos: $photos
     ) {
       ok
+      errors {
+        path
+        message
+      }
       shoe {
         brand
         owner {
