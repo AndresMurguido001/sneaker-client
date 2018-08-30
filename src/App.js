@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./index.css";
 import { ApolloClient } from "apollo-client";
 import { ApolloProvider } from "react-apollo";
 import { ApolloLink } from "apollo-link";
@@ -14,6 +15,7 @@ import jwt_decode from "jwt-decode";
 //Routes
 import Home from "./Routes/Home";
 import MyProfile from "./Routes/Profile";
+import Shoes from "./Routes/Shoes";
 
 const httpLink = createHttpLink({ uri: "http://localhost:8080/graphql" });
 
@@ -94,7 +96,8 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
-            <PrivateRoute exact path="/:userId" component={MyProfile} />
+            <Route exact path="/shoes" component={Shoes} />
+            <PrivateRoute exact path="/:id" component={MyProfile} />
           </Switch>
         </Router>
       </ApolloProvider>

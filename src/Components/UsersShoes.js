@@ -5,7 +5,13 @@ import ShoeCell from "./ShoeCell";
 const UsersShoes = ({ shoes }) => (
   <Grid columns={3}>
     {shoes.map((shoe, index) => {
-      return <ShoeCell key={`shoe-${shoe.model}-${index}`} shoe={shoe} />;
+      return (
+        <ShoeCell
+          key={`shoe-${shoe.model}-${index}`}
+          profileImg={shoe.owner.profilePic}
+          shoe={shoe}
+        />
+      );
     })}
   </Grid>
 );

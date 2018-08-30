@@ -6,28 +6,60 @@ import UsersShoes from "../Components/UsersShoes";
 import ModalWrap from "../Components/ModalWrap";
 import UploadShoe from "../Containers/UploadShoe";
 import UploadProfilePic from "../Containers/UploadProfilePic";
+import jwt_decode from "jwt-decode";
 
 let ProfileUser = ({
   data: { id, firstname, lastname, email, shoes, profilePic }
 }) => {
+  let hasShoes = shoes.length > 0 ? true : false;
+
+  let mostRecent = shoes[shoes.length - 1];
+  let mostRecentPhoto = hasShoes ? mostRecent.photos[0] : null;
+  let likesArr = hasShoes ? shoes.map(shoe => shoe.numberOfLikes) : null;
+  let totalLikes = hasShoes ? likesArr.reduce((acc, cv) => acc + cv) : 0;
+
+  let isCurrentUser = jwt_decode(localStorage.getItem("token"));
+
   return (
     <div>
-      <Grid columns={3} padded="horizontally">
+      <Grid columns={3} padded="horizontally" style={{ height: "100vh" }}>
         <Grid.Column>
-          <Card>
-            <Image src={bg} />
-            <Card.Content>
-              <Card.Header>Most Recent</Card.Header>
-              <Card.Meta>Joined in 2016</Card.Meta>
-              <Card.Description>Shoe Description</Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-              <a>
-                <Icon name="user" />
-                Number of likes
-              </a>
-            </Card.Content>
-          </Card>
+          {hasShoes ? (
+            <Card>
+              <Image
+                size="medium"
+                src={mostRecentPhoto ? mostRecentPhoto : bg}
+              />
+              <Card.Content>
+                <Card.Header>{mostRecent.model}</Card.Header>
+                <Card.Meta>{mostRecent.brand}</Card.Meta>
+                <Card.Description>{mostRecent.description}</Card.Description>
+              </Card.Content>
+              <Card.Content extra>
+                <a>
+                  <Icon name="like" />
+                  {mostRecent.numberOfLikes}
+                </a>
+
+                <span style={{ float: "right" }}>{`Size: ${
+                  mostRecent.size
+                }`}</span>
+              </Card.Content>
+            </Card>
+          ) : (
+            <Card>
+              <Card.Header textAlign="center" style={{ padding: "20px 0" }}>
+                Your lastest uploaded pair will appear here
+              </Card.Header>
+              <Card.Content textAlign="center" style={{ padding: "20px 0" }}>
+                Upload Images to show the condition of your shoes
+              </Card.Content>
+              <Card.Meta style={{ padding: "20px 0" }} textAlign="center">
+                Here is where the likes will be displayed as well as the price,
+                and your avatar image for your customers to reach your profile.
+              </Card.Meta>
+            </Card>
+          )}
         </Grid.Column>
         <Grid.Column>
           <Card>
@@ -55,20 +87,27 @@ let ProfileUser = ({
             <Card.Content header={`About ${firstname}`} />
             <Card.Content description="Description goes here" />
             <Card.Content extra>
-              <Icon name="user" />
-              Total number of likes
+              <Icon inverted circular name="like" />
+              {totalLikes}
             </Card.Content>
           </Card>
         </Grid.Column>
       </Grid>
-      <ModalWrap contentDescription="Upload your photo" iconName="picture">
-        <UploadProfilePic />
-      </ModalWrap>
-      <ModalWrap contentDescription="List your shoes" iconName="upload">
-        <UploadShoe userId={id} />
-      </ModalWrap>
+
+      {isCurrentUser.user.id === id ? (
+        <div>
+          <ModalWrap contentDescription="Upload your photo" iconName="picture">
+            <UploadProfilePic />
+          </ModalWrap>
+          <ModalWrap contentDescription="List your shoes" iconName="upload">
+            <UploadShoe userId={id} />
+          </ModalWrap>
+        </div>
+      ) : null}
+
       <UsersShoes shoes={shoes} />
     </div>
   );
 };
+
 export default ProfileUser;

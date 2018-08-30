@@ -4,7 +4,7 @@ import axios from "axios";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import moment from "moment";
-import { Button, Form, Header, Image } from "semantic-ui-react";
+import { Button, Form, Header } from "semantic-ui-react";
 import styled from "styled-components";
 
 let PreviewImgWrap = styled.div`
@@ -81,7 +81,7 @@ class UploadProfilePic extends React.Component {
         profilePic: url
       }
     });
-    let { ok, errors, profilePic } = graphqlResponse.data.uploadProfilePic;
+    let { ok, errors } = graphqlResponse.data.uploadProfilePic;
     if (ok) {
       console.log("Successfully uploaded profile pic");
     } else {
