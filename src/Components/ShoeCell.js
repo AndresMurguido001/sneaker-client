@@ -2,12 +2,18 @@ import React from "react";
 import { Grid, Image, Card, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 const ShoeCell = ({
-  shoe: { photos, model, brand, description, numberOfLikes, size, owner },
+  shoe: { id, photos, model, brand, description, numberOfLikes, size, owner },
   profileImg
 }) => (
   <Grid.Column>
     <Card>
-      <Image size="medium" centered src={photos ? photos[0] : null} />
+      {id ? (
+        <Link to={`/shoes/${id}`}>
+          <Image size="medium" centered src={photos ? photos[0] : null} />
+        </Link>
+      ) : (
+        <Image size="medium" centered src={photos ? photos[0] : null} />
+      )}
       <Card.Content>
         {profileImg ? (
           <Link to={`/${owner.id}`}>

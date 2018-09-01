@@ -15,6 +15,7 @@ import ShoeCell from "../Components/ShoeCell";
 let AllShoesQuery = gql`
   query {
     getAllShoes {
+      id
       brand
       owner {
         id

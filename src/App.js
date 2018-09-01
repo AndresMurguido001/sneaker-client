@@ -16,6 +16,7 @@ import jwt_decode from "jwt-decode";
 import Home from "./Routes/Home";
 import MyProfile from "./Routes/Profile";
 import Shoes from "./Routes/Shoes";
+import DisplayShoe from "./Routes/DisplayShoe";
 
 const httpLink = createHttpLink({ uri: "http://localhost:8080/graphql" });
 
@@ -97,6 +98,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/shoes" component={Shoes} />
             <PrivateRoute exact path="/:id" component={MyProfile} />
+            <PrivateRoute exact path="/shoes/:id" component={DisplayShoe} />
           </Switch>
         </Router>
       </ApolloProvider>

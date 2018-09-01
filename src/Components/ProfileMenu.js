@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-export default class SidebarExampleDimmed extends Component {
+export default class ProfileMenu extends Component {
   state = { visible: false };
 
   handleButtonClick = () => this.setState({ visible: !this.state.visible });
