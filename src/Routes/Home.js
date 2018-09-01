@@ -11,7 +11,6 @@ import Login from "../Components/Login";
 import Register from "../Components/Register";
 import styled from "styled-components";
 import bg from "../images/mainOneBg.jpg";
-import jwt_decode from "jwt-decode";
 
 let Background = styled.div`
   height: 100vh;
@@ -33,25 +32,12 @@ class Home extends React.Component {
     openRegisterModal: false
   };
 
-  getUser = () => {
-    let token = localStorage.getItem("token");
-    try {
-      let {
-        user: { id }
-      } = jwt_decode(token);
-      return id;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   render() {
     let { openLoginModal, openRegisterModal } = this.state;
-    let id = this.getUser();
 
     return (
       <Container textAlign="center" fluid>
-        <HomeNav id={id} />
+        <HomeNav />
 
         <Background>
           <Login

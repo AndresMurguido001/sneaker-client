@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 import moment from "moment";
 import { Button, Form, Header } from "semantic-ui-react";
 import styled from "styled-components";
+import ModalWrap from "../Components/ModalWrap";
 
 let PreviewImgWrap = styled.div`
   width: 100px;
@@ -23,7 +24,8 @@ let previewImg = preview => (
 class UploadProfilePic extends React.Component {
   state = {
     file: null,
-    loading: false
+    loading: false,
+    visible: false
   };
 
   onDrop = async file => {
@@ -88,36 +90,48 @@ class UploadProfilePic extends React.Component {
       console.log("Error: ", errors);
     }
     this.setState({ loading: false });
+    this.onClose();
   };
+  handleClick = () => this.setState({ visible: !this.state.visible });
+  onClose = () => this.setState({ visible: false });
 
   render() {
-    const { file } = this.state;
+    const { file, visible } = this.state;
     return (
-      <Form loading={this.state.loading} style={{ padding: "2rem" }}>
-        <Header>Upload your profile picutre</Header>
-        <Form.Field>
-          <label>Photos</label>
-          <Dropzone onDrop={this.onDrop}>
-            <p>
-              Try dropping some files here, or click to select files to upload.
-            </p>
-          </Dropzone>
-        </Form.Field>
-        <Form.Group>
-          Current Uploaded Files
-          <ul style={{ listStyle: "none" }}>
-            {
-              <li>
-                {file ? file.name : null}
-                {file ? previewImg(file.preview) : null}
-              </li>
-            }
-          </ul>
-        </Form.Group>
-        <Button type="submit" onClick={this.submit}>
-          Submit
-        </Button>
-      </Form>
+      <ModalWrap
+        handleClick={this.handleClick}
+        onClose={this.onClose}
+        open={visible}
+        contentDescription="Upload your photo"
+        iconName="picture"
+      >
+        <Form loading={this.state.loading} style={{ padding: "2rem" }}>
+          <Header>Upload your profile picutre</Header>
+          <Form.Field>
+            <label>Photos</label>
+            <Dropzone onDrop={this.onDrop}>
+              <p>
+                Try dropping some files here, or click to select files to
+                upload.
+              </p>
+            </Dropzone>
+          </Form.Field>
+          <Form.Group>
+            Current Uploaded Files
+            <ul style={{ listStyle: "none" }}>
+              {
+                <li>
+                  {file ? file.name : null}
+                  {file ? previewImg(file.preview) : null}
+                </li>
+              }
+            </ul>
+          </Form.Group>
+          <Button type="submit" onClick={this.submit}>
+            Submit
+          </Button>
+        </Form>
+      </ModalWrap>
     );
   }
 }

@@ -1,33 +1,62 @@
-import React from "react";
+import React, { Component } from "react";
+import { Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
-import { Icon } from "semantic-ui-react";
+export default class SidebarExampleDimmed extends Component {
+  state = { visible: false };
 
-class ProfileMenu extends React.Component {
-  state = {
-    active: false
-  };
+  handleButtonClick = () => this.setState({ visible: !this.state.visible });
+
+  handleSidebarHide = () => this.setState({ visible: false });
+
   render() {
+    const { visible } = this.state;
     return (
       <div>
-        <Icon
-          name="arrow circle left"
-          size="big"
-          onClick={() => this.setState({ active: !this.state.active })}
-          circular
-          inverted
-          style={{ float: "right", position: "relative", zIndex: 3 }}
-        />
+        <Sidebar.Pushable as={Segment}>
+          <Sidebar
+            as={Menu}
+            animation="overlay"
+            icon="labeled"
+            inverted
+            onHide={this.handleSidebarHide}
+            vertical
+            visible={visible}
+            width="thin"
+          >
+            <Link to="/">
+              <Menu.Item>
+                <Icon name="home" />
+                Home
+              </Menu.Item>
+            </Link>
+            <Link to="/shoes">
+              <Menu.Item>
+                <Icon name="shop" />
+                Shop Shoes
+              </Menu.Item>
+            </Link>
+            <Link to={`/${this.props.currentUserId}`}>
+              <Menu.Item>
+                <Icon name="user" />
+                Profile
+              </Menu.Item>
+            </Link>
+          </Sidebar>
 
-        <div className={this.state.active ? "menu active" : "menu"}>
-          <ul className="menuList">
-            <li className="listItem">Home</li>
-            <li className="listItem">Shoes</li>
-            <li className="listItem">Search</li>
-          </ul>
-        </div>
+          <Sidebar.Pusher dimmed={visible}>
+            <Segment basic>
+              <Icon
+                size="huge"
+                name="arrow alternate circle right"
+                onClick={this.handleButtonClick}
+              />
+
+              {this.props.children}
+            </Segment>
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
       </div>
     );
   }
 }
-
-export default ProfileMenu;

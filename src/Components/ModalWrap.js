@@ -2,14 +2,7 @@ import React from "react";
 import { Modal, Button } from "semantic-ui-react";
 
 class ModalWrap extends React.Component {
-  state = {
-    open: false
-  };
-
-  show = dimmer => () => this.setState({ dimmer, open: true });
-  close = () => this.setState({ open: false });
   render() {
-    const { open, dimmer } = this.state;
     return (
       <div>
         <Button
@@ -17,9 +10,9 @@ class ModalWrap extends React.Component {
           icon={this.props.iconName}
           style={{ margin: "10px 0" }}
           labelPosition="left"
-          onClick={this.show(true)}
+          onClick={this.props.handleClick}
         />
-        <Modal dimmer={dimmer} open={open} onClose={this.close}>
+        <Modal open={this.props.open} onClose={this.props.onClose}>
           {this.props.children}
         </Modal>
       </div>

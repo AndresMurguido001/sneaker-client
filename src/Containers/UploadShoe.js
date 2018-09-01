@@ -4,17 +4,9 @@ import axios from "axios";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import moment from "moment";
-import { Button, Form, Header, Message } from "semantic-ui-react";
-import styled from "styled-components";
+import { Button, Form, Header, Message, Image } from "semantic-ui-react";
 
-let PreviewImgWrap = styled.div`
-  width: 100px;
-`;
-let previewImg = preview => (
-  <PreviewImgWrap>
-    <img src={preview} alt="preview" />
-  </PreviewImgWrap>
-);
+import ModalWrap from "../Components/ModalWrap";
 
 class Upload extends React.Component {
   state = {
@@ -24,12 +16,12 @@ class Upload extends React.Component {
     size: 0,
     description: "",
     loading: false,
-    errors: {}
+    errors: {},
+    visible: false
   };
 
   onDrop = async filesToUpload => {
     this.setState({ files: filesToUpload });
-    console.log(this.state.files);
   };
 
   onChange = (e, data) => {
@@ -46,9 +38,8 @@ class Upload extends React.Component {
         }
       };
       await axios.put(signature, file, options);
-      console.log("success");
     } catch (err) {
-      console.log("Error", err);
+      console.log("error uploadToS3", err);
     }
   };
 
@@ -74,7 +65,7 @@ class Upload extends React.Component {
         });
         arr.push(res);
       } catch (err) {
-        console.log("Error", err);
+        console.log("Error in SendToServer", err);
       }
     }
 
@@ -86,12 +77,12 @@ class Upload extends React.Component {
     const { files } = this.state;
     let resultUrls = [];
     let signedFiles = await this.sendToServer(files);
+
     signedFiles.map(file => resultUrls.push(file.data.signS3.url));
     let urlAndSignatures = signedFiles.map((file, index) => ({
       file: this.state.files[index],
       signiture: file.data.signS3.signedRequest
     }));
-    console.log(urlAndSignatures);
 
     const createShoeResponse = await this.props.createShoe({
       variables: {
@@ -116,106 +107,106 @@ class Upload extends React.Component {
           console.log("Error in URL & SIGNS", error);
         }
       }
-      this.setState({ loading: false });
-      console.log("success");
+      this.onClose();
     }
     if (errors) {
       let err = {};
-      console.log(errors);
       errors.forEach(({ path, message }) => {
         return (err[`${path.toLowerCase()}Error`] = message);
       });
+      console.log("ErrObj: ", err);
       this.setState({ errors: err });
     }
+    this.setState({ loading: false });
     //history.push("/shoe/:id")
   };
-
+  handleClick = () => this.setState({ visible: !this.state.visible });
+  onClose = () => this.setState({ visible: false });
   render() {
     let { errors } = this.state;
-    let selectOptions = [
-      { text: "5", key: "5", value: "5" },
-      { text: "6", key: "6", value: "6" },
-      { text: "7", key: "7", value: "7" },
-      { text: "8", key: "8", value: "8" },
-      { text: "9", key: "9", value: "9" },
-      { text: "10", key: "10", value: "10" },
-      { text: "11", key: "11", value: "11" }
-    ];
     let errList = [];
     if (errors) {
       Object.values(errors).map(msg => errList.push(msg));
     }
     return (
-      <Form loading={this.state.loading} style={{ padding: "2rem" }}>
-        <Header>List Your Shoes</Header>
-        <Form.Group>
-          <Form.Input
-            label="Brand"
-            value={this.state.brand}
-            onChange={this.onChange}
-            name="brand"
-            placeholder="Brand"
-            width={6}
-          />
-          <Form.Input
-            label="Model"
-            value={this.state.model}
-            onChange={this.onChange}
-            name="model"
-            placeholder="Model"
-            width={6}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Input
-            label="Description"
-            value={this.state.description}
-            onChange={this.onChange}
-            name="description"
-            placeholder="Description"
-            width={8}
-          />
-          <Form.Select
-            label="Size"
-            value={this.state.size}
-            selection
-            onChange={this.onChange}
-            options={selectOptions}
-            name="size"
-            placeholder="Size"
-          />
-        </Form.Group>
+      <ModalWrap
+        open={this.state.visible}
+        contentDescription="List your shoes"
+        iconName="upload"
+        handleClick={this.handleClick}
+        onClose={this.onClose}
+      >
+        <Form loading={this.state.loading} style={{ padding: "2rem" }}>
+          <Header>List Your Shoes</Header>
+          <Form.Group>
+            <Form.Input
+              label="Brand"
+              value={this.state.brand}
+              onChange={this.onChange}
+              name="brand"
+              placeholder="Brand"
+              width={6}
+            />
+            <Form.Input
+              label="Model"
+              value={this.state.model}
+              onChange={this.onChange}
+              name="model"
+              placeholder="Model"
+              width={6}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Input
+              label="Description"
+              value={this.state.description}
+              onChange={this.onChange}
+              name="description"
+              placeholder="Description"
+              width={8}
+            />
+            <Form.Input
+              label="Size"
+              value={this.state.size}
+              onChange={this.onChange}
+              name="size"
+              placeholder="Size"
+              maxLength="4"
+            />
+          </Form.Group>
 
-        <Form.Field>
-          <label>Photos</label>
-          <Dropzone onDrop={this.onDrop}>
-            <p>
-              Try dropping some files here, or click to select files to upload.
-            </p>
-          </Dropzone>
-        </Form.Field>
-        <Form.Group>
-          Current Uploaded Files
-          <ul style={{ listStyle: "none" }}>
-            {this.state.files.map((f, i) => (
-              <li key={i}>
-                {f.name}
-                {previewImg(f.preview)}
-              </li>
-            ))}
-          </ul>
-        </Form.Group>
-        <Button type="submit" onClick={this.submit}>
-          Submit
-        </Button>
-        {errList.length > 0 && (
-          <Message
-            error
-            header="There was a problem with your submission"
-            list={errList}
-          />
-        )}
-      </Form>
+          <Form.Field>
+            <label>Photos</label>
+            <Dropzone onDrop={this.onDrop}>
+              <p>
+                Try dropping some files here, or click to select files to
+                upload.
+              </p>
+            </Dropzone>
+          </Form.Field>
+          <Form.Group>
+            Current Uploaded Files
+            <ul style={{ listStyle: "none" }}>
+              {this.state.files.map((f, i) => (
+                <li key={i}>
+                  {f.name}
+                  {<Image src={f.preview} size="medium" />}
+                </li>
+              ))}
+            </ul>
+          </Form.Group>
+          <Button type="submit" onClick={this.submit}>
+            Submit
+          </Button>
+          {errors && (
+            <Message
+              error
+              header="There was a problem with your submission"
+              list={errList}
+            />
+          )}
+        </Form>
+      </ModalWrap>
     );
   }
 }

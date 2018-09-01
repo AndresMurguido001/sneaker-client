@@ -3,6 +3,7 @@ import { Modal, Form, Button, Message } from "semantic-ui-react";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import { withRouter } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const loginMutation = gql`
   mutation($email: String!, $password: String!) {
@@ -34,10 +35,12 @@ class Login extends React.Component {
     let { ok, errors, token, refreshToken } = response.data.login;
     if (ok) {
       this.props.onClose();
-
       localStorage.setItem("token", token);
       localStorage.setItem("refreshToken", refreshToken);
-      this.props.history.push("/profile");
+      let {
+        user: { id }
+      } = jwt_decode(token);
+      this.props.history.push(`/${id}`);
     } else {
       let err = {};
       errors.forEach(({ path, message }) => {

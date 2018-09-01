@@ -64,7 +64,6 @@ const isAuthenticated = () => {
   }
   return true;
 };
-
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}

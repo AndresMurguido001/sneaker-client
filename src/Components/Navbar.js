@@ -1,16 +1,25 @@
 import React from "react";
 import { Grid, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
-export const HomeNav = ({ userId }) => {
+export const HomeNav = () => {
+  let token = localStorage.getItem("token");
+  let currentUserId;
+  if (token) {
+    let {
+      user: { id }
+    } = jwt_decode(token);
+    currentUserId = id;
+  }
   return (
     <Grid
-      columns={3}
+      columns={token ? 3 : 2}
       style={{
         width: "50%",
         float: "right",
         fontSize: "20px",
-        padding: "10px 5px"
+        padding: "10px 20px"
       }}
       textAlign="right"
     >
@@ -22,15 +31,17 @@ export const HomeNav = ({ userId }) => {
             Home{" "}
           </Link>
         </Grid.Column>
-        <Grid.Column>
-          <Link
-            style={{ textDecoration: "none", color: "#000" }}
-            to={`/${userId}`}
-          >
-            <Icon name="user circle outline" />
-            Profile
-          </Link>
-        </Grid.Column>
+        {token ? (
+          <Grid.Column>
+            <Link
+              style={{ textDecoration: "none", color: "#000" }}
+              to={`/${currentUserId}`}
+            >
+              <Icon name="user circle outline" />
+              Profile
+            </Link>
+          </Grid.Column>
+        ) : null}
         <Grid.Column>
           <Link style={{ textDecoration: "none", color: "#000" }} to="/shoes">
             <Icon name="shop" />

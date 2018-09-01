@@ -7,7 +7,7 @@ const ShoeCell = ({
 }) => (
   <Grid.Column>
     <Card>
-      <Image size="small" centered src={photos ? photos[0] : null} />
+      <Image size="medium" centered src={photos ? photos[0] : null} />
       <Card.Content>
         {profileImg ? (
           <Link to={`/${owner.id}`}>

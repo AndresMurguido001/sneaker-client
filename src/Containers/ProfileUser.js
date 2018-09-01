@@ -1,9 +1,8 @@
 import React from "react";
-import { Card, Icon, Image, Grid } from "semantic-ui-react";
+import { Card, Icon, Image, Grid, Container } from "semantic-ui-react";
 import avatar from "../images/avatar.ico";
 import bg from "../images/ProfileBg.jpg";
 import UsersShoes from "../Components/UsersShoes";
-import ModalWrap from "../Components/ModalWrap";
 import UploadShoe from "../Containers/UploadShoe";
 import UploadProfilePic from "../Containers/UploadProfilePic";
 import jwt_decode from "jwt-decode";
@@ -22,7 +21,7 @@ let ProfileUser = ({
 
   return (
     <div>
-      <Grid columns={3} padded="horizontally" style={{ height: "100vh" }}>
+      <Grid columns={3} padded="horizontally">
         <Grid.Column>
           {hasShoes ? (
             <Card>
@@ -93,19 +92,16 @@ let ProfileUser = ({
           </Card>
         </Grid.Column>
       </Grid>
-
-      {isCurrentUser.user.id === id ? (
-        <div>
-          <ModalWrap contentDescription="Upload your photo" iconName="picture">
+      <Container>
+        {isCurrentUser.user.id === id ? (
+          <div>
             <UploadProfilePic />
-          </ModalWrap>
-          <ModalWrap contentDescription="List your shoes" iconName="upload">
             <UploadShoe userId={id} />
-          </ModalWrap>
-        </div>
-      ) : null}
+          </div>
+        ) : null}
 
-      <UsersShoes shoes={shoes} />
+        <UsersShoes shoes={shoes} />
+      </Container>
     </div>
   );
 };
