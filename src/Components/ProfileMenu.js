@@ -11,6 +11,7 @@ export default class ProfileMenu extends Component {
 
   render() {
     const { visible } = this.state;
+	const { currentUserId } = this.props;
     return (
       <div>
         <Sidebar.Pushable as={Segment}>
@@ -36,12 +37,13 @@ export default class ProfileMenu extends Component {
                 Shop Shoes
               </Menu.Item>
             </Link>
-            <Link to={`/${this.props.currentUserId}`}>
+	{ currentUserId ? 
+	  ( <Link to={`/${this.props.currentUserId}`}> 
               <Menu.Item>
                 <Icon name="user" />
                 Profile
               </Menu.Item>
-            </Link>
+            </Link>) : null }
           </Sidebar>
 
           <Sidebar.Pusher dimmed={visible}>

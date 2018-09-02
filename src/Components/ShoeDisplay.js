@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, Icon, Segment, Card, Header } from "semantic-ui-react";
+import { Link } from 'react-router-dom';
 
 export default ({ shoe }) => {
   return (
@@ -19,7 +20,7 @@ export default ({ shoe }) => {
                   floated="left"
                 />
               ))}
-            </Image.Group>
+           </Image.Group>
             <Card raised>
               <Card.Header as="h2" style={{ paddingLeft: "10px" }}>
                 Description
@@ -32,16 +33,20 @@ export default ({ shoe }) => {
             </Card>
             <Card>
               <Card.Header as="h2" style={{ paddingLeft: "10px" }}>
-                {shoe.owner.firstname}
+                Owner
               </Card.Header>
-              <Card.Content>
+              <Card.Content textAlign="center">
+                <p style={{ margin: "auto 0" }}>
+                  {shoe.owner.firstname} {shoe.owner.lastname}
+                </p>
+                <Link to={`/${shoe.owner.id}`}>
                 <Image
                   src={shoe.owner.profilePic}
-                  floated="right"
                   centered
                   circular
                   size="tiny"
                 />
+	  	</Link>
               </Card.Content>
             </Card>
           </Segment.Group>

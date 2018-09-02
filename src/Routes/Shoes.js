@@ -11,6 +11,8 @@ import {
 } from "semantic-ui-react";
 import ShoeBg from "../images/ShoesIndex.jpg";
 import ShoeCell from "../Components/ShoeCell";
+import ProfileMenu from "../Components/ProfileMenu.js";
+import jwt_decode from "jwt-decode";
 
 let AllShoesQuery = gql`
   query {
@@ -30,54 +32,57 @@ let AllShoesQuery = gql`
   }
 `;
 
-const Shoes = ({ data: { loading, getAllShoes } }) =>
-  loading ? (
-    <Dimmer active>
-      <Loader size="large">Loading</Loader>
-    </Dimmer>
-  ) : (
-    <Container>
-      <Image
-        style={{ width: "100%", padding: "20px 0" }}
-        src={ShoeBg}
-        size="huge"
-      />
-      <Header style={styles.header} textAlign="left" size="large">
-        Welcome To Our Store
-      </Header>
-      <Header style={styles.subHead} textAlign="left" sub>
-        Shoes for any occassion. Sneakerhead store allows anyone to sell new
-        shoes. Anyone from a retailer to individuals share their shoes with the
-        world.
-      </Header>
-      <Grid columns="three" stackable={true}>
-        {getAllShoes.map((shoe, index) => (
-          <ShoeCell
-            key={`shoe-${shoe.model}-${index}`}
-            profileImg={shoe.owner.profilePic}
-            shoe={shoe}
-          />
-        ))}
-      </Grid>
-    </Container>
+const Shoes = ({ data: { loading, getAllShoes } }) => {
+  let currentUserId = jwt_decode(localStorage.getItem("token"));
+  if (loading) {
+    return (
+      <Dimmer active>
+        <Loader size="large">Loading</Loader>
+      </Dimmer>
+    );
+  }
+  return (
+    <ProfileMenu currentUserId={currentUserId.user.id}>
+      <Container fluid>
+        <Image src={ShoeBg} fluid centered style={styles.headBgImg} />
+        <Container style={styles.textCont}>
+          <Header style={styles.headers} inverted textAlign="left" size="large">
+            Welcome To Our Store
+          </Header>
+          <Header style={styles.headers} inverted textAlign="left" sub>
+            Shoes for any occassion. Sneakerhead store allows anyone to sell new
+            shoes. Anyone from a retailer to individuals share their shoes with
+            the world.
+          </Header>
+        </Container>
+        <Grid
+          centered
+          style={{ marginTop: "20px" }}
+          columns="three"
+          stackable={true}
+        >
+          {getAllShoes.map((shoe, index) => (
+            <ShoeCell
+              key={`shoe-${shoe.model}-${index}`}
+              profileImg={shoe.owner.profilePic}
+              shoe={shoe}
+            />
+          ))}
+        </Grid>
+      </Container>
+    </ProfileMenu>
   );
+};
 let styles = {
-  header: {
+  textCont: {
     position: "absolute",
     top: "100px",
-    left: "200px",
-    fontSize: "50px",
-    color: "#fff",
-    textShadow: "2px 2px 14px rgba(150, 150, 150, 1)"
+    left: "80px",
+    fontSize: "2rem",
+    width: "300px"
   },
-  subHead: {
-    position: "absolute",
-    width: "20rem",
-    top: "200px",
-    left: "200px",
-    fontSize: "20px",
-    color: "#fff",
-    textShadow: "2px 2px 14px rgba(150, 150, 150, 1)"
+  headers: {
+    textShadow: "2px 2px 11px rgba(0, 0, 0, 0.5)"
   }
 };
 export default graphql(AllShoesQuery)(Shoes);

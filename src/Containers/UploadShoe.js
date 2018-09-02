@@ -5,6 +5,7 @@ import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import moment from "moment";
 import { Button, Form, Header, Message, Image } from "semantic-ui-react";
+import { withRouter } from "react-router-dom";
 
 import ModalWrap from "../Components/ModalWrap";
 
@@ -94,7 +95,11 @@ class Upload extends React.Component {
         userId: this.props.userId
       }
     });
-    let { ok, errors } = createShoeResponse.data.createShoe;
+    let {
+      ok,
+      errors,
+      shoe: { id }
+    } = createShoeResponse.data.createShoe;
     if (ok) {
       // Push to current shoe listing after uploading to s3
       for (let i = 0; i < urlAndSignatures.length; i++) {
@@ -119,6 +124,7 @@ class Upload extends React.Component {
     }
     this.setState({ loading: false });
     //history.push("/shoe/:id")
+    this.props.history.push(`/shoe/${id}`);
   };
   handleClick = () => this.setState({ visible: !this.state.visible });
   onClose = () => this.setState({ visible: false });
@@ -242,6 +248,7 @@ const createShoeMutation = gql`
         message
       }
       shoe {
+        id
         brand
         owner {
           firstname
@@ -255,5 +262,6 @@ const createShoeMutation = gql`
 
 export default compose(
   graphql(s3SignMutation, { name: "s3Sign" }),
-  graphql(createShoeMutation, { name: "createShoe" })
+  graphql(createShoeMutation, { name: "createShoe" }),
+  withRouter
 )(Upload);
