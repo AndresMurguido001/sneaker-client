@@ -16,7 +16,7 @@ let getShoeQuery = gql`
           id
           profilePic
           firstname
-	lastname
+          lastname
         }
         description
         numberOfLikes

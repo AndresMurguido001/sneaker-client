@@ -3,7 +3,8 @@ import { Grid, Image, Card, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 const ShoeCell = ({
   shoe: { id, photos, model, brand, description, numberOfLikes, size, owner },
-  profileImg
+  profileImg,
+  onLikeClick
 }) => (
   <Grid.Column>
     <Card>
@@ -27,10 +28,14 @@ const ShoeCell = ({
         <Card.Description>{description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <a>
-          <Icon name="like" />
-          {numberOfLikes}
-        </a>
+        {onLikeClick ? (
+          <a>
+            <Icon name="like" onClick={onLikeClick} />
+          </a>
+        ) : (
+          <Icon name="like" circular inverted />
+        )}
+        {numberOfLikes}
         <span style={{ float: "right" }}>{`Size: ${size}`}</span>
       </Card.Content>
     </Card>
