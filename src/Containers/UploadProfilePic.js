@@ -29,7 +29,6 @@ class UploadProfilePic extends React.Component {
   };
 
   onDrop = async file => {
-    console.log(file);
     this.setState({ file: file[0] });
   };
 
@@ -47,14 +46,12 @@ class UploadProfilePic extends React.Component {
         }
       };
       await axios.put(signature, file, options);
-      console.log("success");
     } catch (err) {
       console.log("Error", err);
     }
   };
 
   formatFilename = filename => {
-    console.log(filename);
     const date = moment().format("YYYYMMDD");
     const randomString = Math.random()
       .toString(36)
@@ -68,7 +65,6 @@ class UploadProfilePic extends React.Component {
   submit = async () => {
     this.setState({ loading: true });
     const { file } = this.state;
-    console.log(file);
     const response = await this.props.s3Sign({
       variables: {
         filename: this.formatFilename(file.name),
@@ -86,7 +82,9 @@ class UploadProfilePic extends React.Component {
     let { ok, errors } = graphqlResponse.data.uploadProfilePic;
     if (ok) {
       console.log("Successfully uploaded profile pic");
+      //Close Modal
     } else {
+      //Display Error Messages
       console.log("Error: ", errors);
     }
     this.setState({ loading: false });

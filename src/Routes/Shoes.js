@@ -7,7 +7,8 @@ import {
   Dimmer,
   Loader,
   Header,
-  Image
+  Image,
+  Message
 } from "semantic-ui-react";
 import ShoeBg from "../images/ShoesIndex.jpg";
 import ShoeCell from "../Components/ShoeCell";
@@ -44,6 +45,9 @@ let LikeShoeMutation = gql`
 `;
 // ({ data: { loading, getAllShoes } })
 class Shoes extends React.Component {
+  state = {
+    likeError: ""
+  };
   render() {
     let currentUserId = jwt_decode(localStorage.getItem("token"));
     const {
@@ -57,7 +61,7 @@ class Shoes extends React.Component {
       );
     }
     return (
-      <ProfileMenu currentUserId={currentUserId.user.id}>
+      <ProfileMenu>
         <Container fluid>
           <Image src={ShoeBg} fluid centered style={styles.headBgImg} />
           <Container style={styles.textCont}>
@@ -75,6 +79,9 @@ class Shoes extends React.Component {
               with the world.
             </Header>
           </Container>
+          {this.state.likeError && (
+            <Message error content={this.state.likeError} />
+          )}
           <Grid
             centered
             style={{ marginTop: "20px" }}
@@ -87,7 +94,7 @@ class Shoes extends React.Component {
                 profileImg={shoe.owner.profilePic}
                 shoe={shoe}
                 onLikeClick={async () => {
-                  await this.props.mutate({
+                  let response = await this.props.mutate({
                     variables: {
                       userId: currentUserId.user.id,
                       shoeId: shoe.id
@@ -98,6 +105,11 @@ class Shoes extends React.Component {
                       proxy.writeQuery({ query: AllShoesQuery, data });
                     }
                   });
+                  const { errors } = response.data.likeShoe;
+                  if (errors) {
+                    let likeError = errors[0].message;
+                    this.setState({ likeError });
+                  }
                 }}
               />
             ))}
@@ -121,9 +133,5 @@ let styles = {
 };
 export default compose(
   graphql(LikeShoeMutation),
-  graphql(AllShoesQuery, {
-    options: () => ({
-      fetchPolicy: "cache-and-network"
-    })
-  })
+  graphql(AllShoesQuery)
 )(Shoes);

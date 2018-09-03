@@ -4,6 +4,7 @@ import { graphql } from "react-apollo";
 import ProfileUser from "../Containers/ProfileUser";
 import { Container, Loader, Dimmer } from "semantic-ui-react";
 import ProfileMenu from "../Components/ProfileMenu";
+import { Redirect } from "react-router-dom";
 
 let meQuery = gql`
   query($id: String!) {
@@ -41,14 +42,18 @@ class MyProfile extends React.Component {
         </Dimmer>
       );
     }
-    return (
-      <ProfileMenu currentUserId={this.props.match.params.id}>
-        <Container>
-          <h1>{`Welcome To Your Profile ${getUser.firstname}`}</h1>
-          <ProfileUser data={getUser} />
-        </Container>
-      </ProfileMenu>
-    );
+    if (getUser) {
+      return (
+        <ProfileMenu>
+          <Container>
+            <h1>{`Welcome To Your Profile ${getUser.firstname}`}</h1>
+            <ProfileUser data={getUser} />
+          </Container>
+        </ProfileMenu>
+      );
+    } else {
+      return <Redirect to="/" />;
+    }
   }
 }
 

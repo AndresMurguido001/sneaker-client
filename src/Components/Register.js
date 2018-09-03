@@ -48,7 +48,6 @@ class Register extends React.Component {
       this.props.onRegistrationSuccess();
     } else {
       let err = {};
-      console.log(errors);
       errors.forEach(({ path, message }) => {
         return (err[`${path.toLowerCase()}Error`] = message);
       });

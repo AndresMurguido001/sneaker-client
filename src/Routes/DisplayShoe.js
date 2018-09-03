@@ -35,6 +35,7 @@ let DisplayShoe = ({ data: { loading, getShoe } }) => {
       </Dimmer>
     );
   }
+
   return (
     <ProfileMenu>
       <Container style={{ height: "100vh" }}>

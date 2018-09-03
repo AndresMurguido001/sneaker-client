@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 export default class ProfileMenu extends Component {
   state = { visible: false };
@@ -11,7 +12,9 @@ export default class ProfileMenu extends Component {
 
   render() {
     const { visible } = this.state;
-	const { currentUserId } = this.props;
+    const {
+      user: { id }
+    } = jwt_decode(localStorage.getItem("token"));
     return (
       <div>
         <Sidebar.Pushable as={Segment}>
@@ -37,13 +40,14 @@ export default class ProfileMenu extends Component {
                 Shop Shoes
               </Menu.Item>
             </Link>
-	{ currentUserId ? 
-	  ( <Link to={`/${this.props.currentUserId}`}> 
-              <Menu.Item>
-                <Icon name="user" />
-                Profile
-              </Menu.Item>
-            </Link>) : null }
+            {id ? (
+              <Link to={`/${id}`}>
+                <Menu.Item>
+                  <Icon name="user" />
+                  Profile
+                </Menu.Item>
+              </Link>
+            ) : null}
           </Sidebar>
 
           <Sidebar.Pusher dimmed={visible}>

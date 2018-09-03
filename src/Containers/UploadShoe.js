@@ -123,8 +123,7 @@ class Upload extends React.Component {
       this.setState({ errors: err });
     }
     this.setState({ loading: false });
-    //history.push("/shoe/:id")
-    this.props.history.push(`/shoe/${id}`);
+    this.props.history.push(`/shoes/${id}`);
   };
   handleClick = () => this.setState({ visible: !this.state.visible });
   onClose = () => this.setState({ visible: false });
