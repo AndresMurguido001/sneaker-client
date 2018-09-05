@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql, compose } from "react-apollo";
+import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import {
   Container,
@@ -7,15 +7,14 @@ import {
   Dimmer,
   Loader,
   Header,
-  Image,
-  Message
+  Image
 } from "semantic-ui-react";
 import ShoeBg from "../images/ShoesIndex.jpg";
 import ShoeCell from "../Components/ShoeCell";
 import ProfileMenu from "../Components/ProfileMenu.js";
 import jwt_decode from "jwt-decode";
 
-let AllShoesQuery = gql`
+export const AllShoesQuery = gql`
   query {
     getAllShoes {
       id
@@ -32,22 +31,8 @@ let AllShoesQuery = gql`
     }
   }
 `;
-let LikeShoeMutation = gql`
-  mutation($shoeId: Int!, $userId: Int!) {
-    likeShoe(userId: $userId, shoeId: $shoeId) {
-      ok
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
-// ({ data: { loading, getAllShoes } })
+
 class Shoes extends React.Component {
-  state = {
-    likeError: ""
-  };
   render() {
     let currentUserId = jwt_decode(localStorage.getItem("token"));
     const {
@@ -79,38 +64,14 @@ class Shoes extends React.Component {
               with the world.
             </Header>
           </Container>
-          {this.state.likeError && (
-            <Message error content={this.state.likeError} />
-          )}
-          <Grid
-            centered
-            style={{ marginTop: "20px" }}
-            columns="three"
-            stackable={true}
-          >
+          <Grid style={{ marginTop: "20px" }} columns="three" stackable={true}>
             {getAllShoes.map((shoe, index) => (
               <ShoeCell
+                currentUser={currentUserId.user.id}
                 key={`shoe-${shoe.model}-${index}`}
                 profileImg={shoe.owner.profilePic}
                 shoe={shoe}
-                onLikeClick={async () => {
-                  let response = await this.props.mutate({
-                    variables: {
-                      userId: currentUserId.user.id,
-                      shoeId: shoe.id
-                    },
-                    update: (proxy, { data: { likedShoe } }) => {
-                      const data = proxy.readQuery({ query: AllShoesQuery });
-                      data.getAllShoes[index].numberOfLikes += 1;
-                      proxy.writeQuery({ query: AllShoesQuery, data });
-                    }
-                  });
-                  const { errors } = response.data.likeShoe;
-                  if (errors) {
-                    let likeError = errors[0].message;
-                    this.setState({ likeError });
-                  }
-                }}
+                index={index}
               />
             ))}
           </Grid>
@@ -131,7 +92,4 @@ let styles = {
     textShadow: "2px 2px 11px rgba(0, 0, 0, 0.5)"
   }
 };
-export default compose(
-  graphql(LikeShoeMutation),
-  graphql(AllShoesQuery)
-)(Shoes);
+export default graphql(AllShoesQuery)(Shoes);

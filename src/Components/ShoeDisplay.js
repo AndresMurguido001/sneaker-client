@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, Icon, Segment, Card, Header } from "semantic-ui-react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export default ({ shoe }) => {
   return (
@@ -20,7 +20,7 @@ export default ({ shoe }) => {
                   floated="left"
                 />
               ))}
-           </Image.Group>
+            </Image.Group>
             <Card raised>
               <Card.Header as="h2" style={{ paddingLeft: "10px" }}>
                 Description
@@ -31,7 +31,7 @@ export default ({ shoe }) => {
                 <span style={{ float: "right" }}>Size: {shoe.size}</span>
               </Card.Content>
             </Card>
-            <Card>
+            <Card style={{ float: "right" }}>
               <Card.Header as="h2" style={{ paddingLeft: "10px" }}>
                 Owner
               </Card.Header>
@@ -40,13 +40,13 @@ export default ({ shoe }) => {
                   {shoe.owner.firstname} {shoe.owner.lastname}
                 </p>
                 <Link to={`/${shoe.owner.id}`}>
-                <Image
-                  src={shoe.owner.profilePic}
-                  centered
-                  circular
-                  size="tiny"
-                />
-	  	</Link>
+                  <Image
+                    src={shoe.owner.profilePic}
+                    centered
+                    circular
+                    size="tiny"
+                  />
+                </Link>
               </Card.Content>
             </Card>
           </Segment.Group>

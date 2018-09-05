@@ -11,6 +11,7 @@ import Login from "../Components/Login";
 import Register from "../Components/Register";
 import styled from "styled-components";
 import bg from "../images/mainOneBg.jpg";
+import MidSection from "../Components/HomeMidSection";
 
 let Background = styled.div`
   height: 100vh;
@@ -26,6 +27,21 @@ let Background = styled.div`
   clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%);
 `;
 
+let Wrap = styled.div`
+  background: linear-gradient(
+    to bottom,
+    rgba(102, 54, 247, 0.5),
+    rgba(230, 40, 198, 0.3)
+  );
+`;
+let MainContainer = props => (
+  <Wrap>
+    <Container textAlign="center" fluid>
+      {props.children}
+    </Container>
+  </Wrap>
+);
+
 class Home extends React.Component {
   state = {
     openLoginModal: false,
@@ -36,9 +52,8 @@ class Home extends React.Component {
     let { openLoginModal, openRegisterModal } = this.state;
 
     return (
-      <Container textAlign="center" fluid>
+      <MainContainer>
         <HomeNav />
-
         <Background>
           <Login
             key={1}
@@ -85,7 +100,8 @@ class Home extends React.Component {
             </Button>
           </ButtonGroup>
         </Background>
-      </Container>
+        <MidSection />
+      </MainContainer>
     );
   }
 }
