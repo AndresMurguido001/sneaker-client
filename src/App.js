@@ -54,8 +54,12 @@ const afterwareLink = new ApolloLink((operation, forward) => {
 const isAuthenticated = () => {
   const token = localStorage.getItem("token");
   const refreshToken = localStorage.getItem("refreshToken");
+  let currentUser;
   try {
-    jwt_decode(token);
+    let {
+      user: { id }
+    } = jwt_decode(token);
+    currentUser = id;
     const { exp } = jwt_decode(refreshToken);
     if (Date.now() / 1000 > exp) {
       return false;
@@ -63,7 +67,10 @@ const isAuthenticated = () => {
   } catch (err) {
     return false;
   }
-  return true;
+  return {
+    ok: true,
+    userId: currentUser
+  };
 };
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -89,19 +96,25 @@ let client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+export const { Provider, Consumer } = React.createContext();
+
 class App extends Component {
   render() {
+    let { ok, userId } = isAuthenticated();
+
     return (
-      <ApolloProvider client={client}>
-        <Router>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/shoes" component={Shoes} />
-            <PrivateRoute exact path="/:id" component={MyProfile} />
-            <PrivateRoute exact path="/shoes/:id" component={DisplayShoe} />
-          </Switch>
-        </Router>
-      </ApolloProvider>
+      <Provider value={ok ? userId : 0}>
+        <ApolloProvider client={client}>
+          <Router>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/shoes" component={Shoes} />
+              <PrivateRoute exact path="/:id" component={MyProfile} />
+              <PrivateRoute exact path="/shoes/:id" component={DisplayShoe} />
+            </Switch>
+          </Router>
+        </ApolloProvider>
+      </Provider>
     );
   }
 }

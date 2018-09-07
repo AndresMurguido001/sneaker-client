@@ -29,6 +29,7 @@ let ProfileUser = ({
                 size="medium"
                 src={mostRecentPhoto ? mostRecentPhoto : bg}
               />
+              {/* Change to Content Block Semantic to display users who've liked shoes */}
               <Card.Content>
                 <Card.Header>{mostRecent.model}</Card.Header>
                 <Card.Meta>{mostRecent.brand}</Card.Meta>

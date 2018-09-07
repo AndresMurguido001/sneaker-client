@@ -2,6 +2,20 @@ import React, { Component } from "react";
 import { Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import { Consumer } from "../App";
+
+const IconWithLink = () => (
+  <Consumer>
+    {value => (
+      <Link to={`/${value}`}>
+        <Menu.Item>
+          <Icon name="user" />
+          Profile
+        </Menu.Item>
+      </Link>
+    )}
+  </Consumer>
+);
 
 export default class ProfileMenu extends Component {
   state = { visible: false };
@@ -40,14 +54,7 @@ export default class ProfileMenu extends Component {
                 Shop Shoes
               </Menu.Item>
             </Link>
-            {id ? (
-              <Link to={`/${id}`}>
-                <Menu.Item>
-                  <Icon name="user" />
-                  Profile
-                </Menu.Item>
-              </Link>
-            ) : null}
+            <IconWithLink />
           </Sidebar>
 
           <Sidebar.Pusher dimmed={visible}>

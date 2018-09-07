@@ -7,7 +7,8 @@ import {
   Dimmer,
   Loader,
   Header,
-  Image
+  Image,
+  Divider
 } from "semantic-ui-react";
 import ShoeBg from "../images/ShoesIndex.jpg";
 import ShoeCell from "../Components/ShoeCell";
@@ -64,6 +65,7 @@ class Shoes extends React.Component {
               with the world.
             </Header>
           </Container>
+          {/* Figure Out how to get uploaded shoe to display on index after being created */}
           <Grid style={{ marginTop: "20px" }} columns="three" stackable={true}>
             {getAllShoes.map((shoe, index) => (
               <ShoeCell
