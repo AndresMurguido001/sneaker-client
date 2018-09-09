@@ -5,6 +5,8 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { AllShoesQuery } from "../Routes/Shoes";
 import { Message } from "semantic-ui-react";
+import EvenImage from "../Components/EvenImage";
+import CardAnimateWrap from "./CardAnimateWrap";
 
 let LikeShoeMutation = gql`
   mutation($shoeId: Int!, $userId: Int!) {
@@ -18,9 +20,15 @@ let LikeShoeMutation = gql`
   }
 `;
 class ShoeCell extends React.Component {
-  state = {
-    likeError: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      likeError: "",
+      tooLarge: false
+    };
+    this.cardWrapper = React.createRef();
+  }
+
   onLikeClick = async () => {
     await this.props.mutate({
       variables: {
@@ -44,6 +52,12 @@ class ShoeCell extends React.Component {
       }
     });
   };
+  getSize = () => {
+    if (this.cardWrapper.current.offsetHeight > 327) {
+      this.setState({ tooLarge: true });
+    }
+  };
+
   render() {
     let {
       shoe: {
@@ -56,58 +70,61 @@ class ShoeCell extends React.Component {
         size,
         owner
       },
-      profileImg
+      profileImg,
+      index
     } = this.props;
     let primaryPhoto = photos ? photos[0] : null;
-    let secondaryPhotos = photos.filter(
-      (photo, index) => (index === 0 ? false : photo)
-    );
+    let { tooLarge } = this.state;
     return (
       <Grid.Column>
-        <Card raised>
-          {this.state.likeError && (
-            <Message error content={this.state.likeError} />
-          )}
-          {id ? (
-            <Link to={`/shoes/${id}`}>
-              <Image size="medium" centered src={primaryPhoto} />
-            </Link>
-          ) : (
-            <Image size="medium" centered src={primaryPhoto} />
-          )}
-          <Card.Content>
-            {profileImg ? (
-              <Link to={`/${owner.id}`}>
-                <Image floated="right" avatar src={profileImg} />
-              </Link>
-            ) : (
-              <Icon size="big" style={{ float: "right" }} name="user circle" />
-            )}
-            <Card.Header>{model}</Card.Header>
-            <Card.Meta>{brand}</Card.Meta>
-            <Card.Description>
-              <p>{description}</p>
-              {secondaryPhotos
-                ? secondaryPhotos.map((photo, index) => (
-                    <Image
-                      key={`${photo}-${index}-shoes-display`}
-                      src={photo}
-                      size="tiny"
-                    />
-                  ))
-                : null}
-            </Card.Description>
-          </Card.Content>
-          <Card.Content extra>
-            <a>
-              <Icon name="like" onClick={this.onLikeClick} />
-            </a>
-            {numberOfLikes}
-            <span style={{ float: "right" }}>{`Size: ${size}`}</span>
-          </Card.Content>
-        </Card>
+        <CardAnimateWrap index={index}>
+          <div ref={this.cardWrapper} onLoad={this.getSize}>
+            <Card style={tooLarge ? style.tooLarge : null} raised>
+              {this.state.likeError && (
+                <Message error content={this.state.likeError} />
+              )}
+              {id ? (
+                <Link to={`/shoes/${id}`}>
+                  <EvenImage src={primaryPhoto} />
+                </Link>
+              ) : (
+                <EvenImage src={primaryPhoto} />
+              )}
+              <Card.Content>
+                {profileImg ? (
+                  <Link to={`/${owner.id}`}>
+                    <Image floated="right" avatar src={profileImg} />
+                  </Link>
+                ) : (
+                  <Icon
+                    size="big"
+                    style={{ float: "right" }}
+                    name="user circle"
+                  />
+                )}
+                <Card.Header>{model}</Card.Header>
+                <Card.Meta>{brand}</Card.Meta>
+                <Card.Description>
+                  <p>{description}</p>
+                </Card.Description>
+              </Card.Content>
+              <Card.Content extra>
+                <a>
+                  <Icon name="like" onClick={this.onLikeClick} />
+                </a>
+                {numberOfLikes}
+                <span style={{ float: "right" }}>{`Size: ${size}`}</span>
+              </Card.Content>
+            </Card>
+          </div>
+        </CardAnimateWrap>
       </Grid.Column>
     );
   }
 }
+let style = {
+  tooLarge: {
+    height: "327px"
+  }
+};
 export default graphql(LikeShoeMutation)(ShoeCell);

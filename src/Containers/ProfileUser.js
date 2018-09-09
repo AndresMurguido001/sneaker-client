@@ -18,7 +18,7 @@ let ProfileUser = ({
   let totalLikes = hasShoes ? likesArr.reduce((acc, cv) => acc + cv) : 0;
 
   let isCurrentUser = jwt_decode(localStorage.getItem("token"));
-
+  //Replace currentUserId with Context
   return (
     <div>
       <Grid columns={3} padded="horizontally">

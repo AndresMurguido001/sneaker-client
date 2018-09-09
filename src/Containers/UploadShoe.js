@@ -8,7 +8,7 @@ import { Button, Form, Header, Message, Image } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 
 import ModalWrap from "../Components/ModalWrap";
-
+//Create Component to resize image
 class Upload extends React.Component {
   state = {
     files: [],
@@ -21,8 +21,8 @@ class Upload extends React.Component {
     visible: false
   };
 
-  onDrop = async filesToUpload => {
-    this.setState({ files: filesToUpload });
+  onDrop = files => {
+    this.setState({ files });
   };
 
   onChange = (e, data) => {
@@ -76,6 +76,7 @@ class Upload extends React.Component {
   submit = async () => {
     this.setState({ loading: true });
     const { files } = this.state;
+
     let resultUrls = [];
     let signedFiles = await this.sendToServer(files);
 
@@ -119,7 +120,6 @@ class Upload extends React.Component {
       errors.forEach(({ path, message }) => {
         return (err[`${path.toLowerCase()}Error`] = message);
       });
-      console.log("ErrObj: ", err);
       this.setState({ errors: err });
     }
     this.setState({ loading: false });

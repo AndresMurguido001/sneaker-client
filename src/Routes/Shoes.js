@@ -1,19 +1,13 @@
 import React from "react";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
-import {
-  Container,
-  Grid,
-  Dimmer,
-  Loader,
-  Header,
-  Image,
-  Divider
-} from "semantic-ui-react";
-import ShoeBg from "../images/ShoesIndex.jpg";
+import { Container, Grid, Dimmer, Loader, Header } from "semantic-ui-react";
 import ShoeCell from "../Components/ShoeCell";
 import ProfileMenu from "../Components/ProfileMenu.js";
-import jwt_decode from "jwt-decode";
+import { Consumer } from "../App";
+//Style
+import animation from "../animation";
+import styles from "../styles/Shoes";
 
 export const AllShoesQuery = gql`
   query {
@@ -34,8 +28,19 @@ export const AllShoesQuery = gql`
 `;
 
 class Shoes extends React.Component {
+  constructor() {
+    super();
+    this.mainImage = null;
+    this.headerWrap = null;
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data.loading !== this.props.data.loading) {
+      animation.shoesMainBg(this.mainImage);
+      animation.headerAlign(this.headerWrap);
+    }
+  }
+
   render() {
-    let currentUserId = jwt_decode(localStorage.getItem("token"));
     const {
       data: { loading, getAllShoes }
     } = this.props;
@@ -46,52 +51,62 @@ class Shoes extends React.Component {
         </Dimmer>
       );
     }
+
+    let ShoeCells = () => (
+      <Consumer>
+        {value =>
+          getAllShoes.map((shoe, index) => (
+            <ShoeCell
+              currentUser={value}
+              key={`shoe-${shoe.model}-${index}`}
+              profileImg={shoe.owner.profilePic}
+              shoe={shoe}
+              index={index}
+            />
+          ))
+        }
+      </Consumer>
+    );
+
     return (
       <ProfileMenu>
-        <Container fluid>
-          <Image src={ShoeBg} fluid centered style={styles.headBgImg} />
-          <Container style={styles.textCont}>
-            <Header
-              style={styles.headers}
-              inverted
-              textAlign="left"
-              size="large"
-            >
-              Welcome To Our Store
-            </Header>
-            <Header style={styles.headers} inverted textAlign="left" sub>
-              Shoes for any occassion. Sneakerhead store allows anyone to sell
-              new shoes. Anyone from a retailer to individuals share their shoes
-              with the world.
-            </Header>
-          </Container>
+        <div style={styles.shoesIndex.shoesIndexWrap} />
+        <Container style={styles.shoesIndex.container} fluid>
+          <div
+            ref={el => (this.mainImage = el)}
+            style={styles.shoesIndex.mainBgLg}
+          >
+            <Container>
+              <div ref={el => (this.headerWrap = el)}>
+                <Header
+                  style={styles.shoesIndex.primaryHeader}
+                  inverted
+                  textAlign="center"
+                >
+                  Welcome To Our Store
+                </Header>
+                <Header
+                  style={styles.shoesIndex.secondaryHeader}
+                  inverted
+                  textAlign="left"
+                  sub
+                >
+                  Shoes for any occassion. Sneakerhead store allows anyone to
+                  sell new shoes. Anyone from a retailer to individuals share
+                  their shoes with the world.
+                </Header>
+              </div>
+            </Container>
+          </div>
+
           {/* Figure Out how to get uploaded shoe to display on index after being created */}
-          <Grid style={{ marginTop: "20px" }} columns="three" stackable={true}>
-            {getAllShoes.map((shoe, index) => (
-              <ShoeCell
-                currentUser={currentUserId.user.id}
-                key={`shoe-${shoe.model}-${index}`}
-                profileImg={shoe.owner.profilePic}
-                shoe={shoe}
-                index={index}
-              />
-            ))}
+          <Grid style={styles.shoesIndex.grid} columns={4} stackable={true}>
+            <ShoeCells />
           </Grid>
         </Container>
       </ProfileMenu>
     );
   }
 }
-let styles = {
-  textCont: {
-    position: "absolute",
-    top: "100px",
-    left: "80px",
-    fontSize: "2rem",
-    width: "300px"
-  },
-  headers: {
-    textShadow: "2px 2px 11px rgba(0, 0, 0, 0.5)"
-  }
-};
+
 export default graphql(AllShoesQuery)(Shoes);

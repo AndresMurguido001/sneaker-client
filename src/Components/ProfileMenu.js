@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 import { Consumer } from "../App";
 
 const IconWithLink = () => (
@@ -26,9 +25,6 @@ export default class ProfileMenu extends Component {
 
   render() {
     const { visible } = this.state;
-    const {
-      user: { id }
-    } = jwt_decode(localStorage.getItem("token"));
     return (
       <div>
         <Sidebar.Pushable as={Segment}>
@@ -61,6 +57,9 @@ export default class ProfileMenu extends Component {
             <Segment basic>
               <Icon
                 size="huge"
+                id="sideMenuIcon"
+                style={styles.icon}
+                bordered
                 name="arrow alternate circle right"
                 onClick={this.handleButtonClick}
               />
@@ -73,3 +72,14 @@ export default class ProfileMenu extends Component {
     );
   }
 }
+let styles = {
+  icon: {
+    color: "#fff",
+    borderRadius: "50%",
+    backgroundColor: "#00c78f",
+    position: "absolute",
+    top: "50px",
+    left: "20px",
+    zIndex: "3"
+  }
+};

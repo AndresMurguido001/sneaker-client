@@ -61,11 +61,18 @@ const isAuthenticated = () => {
     } = jwt_decode(token);
     currentUser = id;
     const { exp } = jwt_decode(refreshToken);
+
     if (Date.now() / 1000 > exp) {
-      return false;
+      return {
+        ok: false,
+        userId: 0
+      };
     }
   } catch (err) {
-    return false;
+    return {
+      ok: false,
+      userId: 0
+    };
   }
   return {
     ok: true,
@@ -101,7 +108,6 @@ export const { Provider, Consumer } = React.createContext();
 class App extends Component {
   render() {
     let { ok, userId } = isAuthenticated();
-
     return (
       <Provider value={ok ? userId : 0}>
         <ApolloProvider client={client}>
