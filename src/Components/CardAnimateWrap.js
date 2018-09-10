@@ -31,7 +31,8 @@ let styles = {
   wrapper: {
     transform: "translateY(200px) rotateY(-90deg)",
     perspective: "800",
-    opacity: "0"
+    opacity: "0",
+    padding: "1.5rem"
   }
 };
 

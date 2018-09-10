@@ -61,7 +61,6 @@ const isAuthenticated = () => {
     } = jwt_decode(token);
     currentUser = id;
     const { exp } = jwt_decode(refreshToken);
-
     if (Date.now() / 1000 > exp) {
       return {
         ok: false,
@@ -82,17 +81,20 @@ const isAuthenticated = () => {
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
-      isAuthenticated() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: "/"
-          }}
-        />
-      )
-    }
+    render={props => {
+      let { ok } = isAuthenticated();
+      if (ok) {
+        return <Component {...props} />;
+      } else {
+        return (
+          <Redirect
+            to={{
+              pathname: "/"
+            }}
+          />
+        );
+      }
+    }}
   />
 );
 

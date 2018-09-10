@@ -101,7 +101,7 @@ let ProfileUser = ({
           </div>
         ) : null}
 
-        <UsersShoes shoes={shoes} />
+        <UsersShoes profilePic={profilePic} shoes={shoes} />
       </Container>
     </div>
   );

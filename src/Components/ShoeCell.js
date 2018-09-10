@@ -71,53 +71,63 @@ class ShoeCell extends React.Component {
         owner
       },
       profileImg,
-      index
+      usersProfile
     } = this.props;
     let primaryPhoto = photos ? photos[0] : null;
     let { tooLarge } = this.state;
     return (
       <Grid.Column>
-        <CardAnimateWrap index={index}>
-          <div ref={this.cardWrapper} onLoad={this.getSize}>
-            <Card style={tooLarge ? style.tooLarge : null} raised>
-              {this.state.likeError && (
-                <Message error content={this.state.likeError} />
-              )}
-              {id ? (
-                <Link to={`/shoes/${id}`}>
-                  <EvenImage src={primaryPhoto} />
-                </Link>
-              ) : (
+        <div ref={this.cardWrapper} onLoad={this.getSize}>
+          <Card style={tooLarge ? style.tooLarge : null} raised>
+            {this.state.likeError && (
+              <Message error content={this.state.likeError} />
+            )}
+            {id ? (
+              <Link to={`/shoes/${id}`}>
                 <EvenImage src={primaryPhoto} />
-              )}
-              <Card.Content>
-                {profileImg ? (
-                  <Link to={`/${owner.id}`}>
+              </Link>
+            ) : (
+              <EvenImage src={primaryPhoto} />
+            )}
+            <Card.Content>
+              {usersProfile ? (
+                <Icon
+                  size="big"
+                  style={{ float: "right" }}
+                  name="user circle"
+                />
+              ) : (
+                <Link to={`/${owner.id}`}>
+                  {profileImg ? (
                     <Image floated="right" avatar src={profileImg} />
-                  </Link>
-                ) : (
-                  <Icon
-                    size="big"
-                    style={{ float: "right" }}
-                    name="user circle"
-                  />
-                )}
-                <Card.Header>{model}</Card.Header>
-                <Card.Meta>{brand}</Card.Meta>
-                <Card.Description>
-                  <p>{description}</p>
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
+                  ) : (
+                    <Icon
+                      size="big"
+                      name="user circle outline"
+                      style={{ float: "right ", color: "black" }}
+                    />
+                  )}
+                </Link>
+              )}
+              <Card.Header>{model}</Card.Header>
+              <Card.Meta>{brand}</Card.Meta>
+              <Card.Description>
+                <p>{description}</p>
+              </Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+              {usersProfile ? (
+                <Icon name="like" color="red" />
+              ) : (
                 <a>
                   <Icon name="like" onClick={this.onLikeClick} />
                 </a>
-                {numberOfLikes}
-                <span style={{ float: "right" }}>{`Size: ${size}`}</span>
-              </Card.Content>
-            </Card>
-          </div>
-        </CardAnimateWrap>
+              )}
+              {numberOfLikes}
+              <span style={{ float: "right" }}>{`Size: ${size}`}</span>
+            </Card.Content>
+          </Card>
+        </div>
       </Grid.Column>
     );
   }
@@ -125,6 +135,9 @@ class ShoeCell extends React.Component {
 let style = {
   tooLarge: {
     height: "327px"
+  },
+  cardExtra: {
+    padding: "10px"
   }
 };
 export default graphql(LikeShoeMutation)(ShoeCell);

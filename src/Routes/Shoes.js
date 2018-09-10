@@ -8,6 +8,7 @@ import { Consumer } from "../App";
 //Style
 import animation from "../animation";
 import styles from "../styles/Shoes";
+import CardAnimateWrap from "../Components/CardAnimateWrap";
 
 export const AllShoesQuery = gql`
   query {
@@ -56,13 +57,15 @@ class Shoes extends React.Component {
       <Consumer>
         {value =>
           getAllShoes.map((shoe, index) => (
-            <ShoeCell
-              currentUser={value}
-              key={`shoe-${shoe.model}-${index}`}
-              profileImg={shoe.owner.profilePic}
-              shoe={shoe}
-              index={index}
-            />
+            <CardAnimateWrap key={`${shoe.brand}-${index}`}>
+              <ShoeCell
+                currentUser={value}
+                key={`shoe-${shoe.model}-${index}`}
+                profileImg={shoe.owner.profilePic}
+                shoe={shoe}
+                index={index}
+              />
+            </CardAnimateWrap>
           ))
         }
       </Consumer>

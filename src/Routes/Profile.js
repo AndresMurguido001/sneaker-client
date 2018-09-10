@@ -21,10 +21,6 @@ let meQuery = gql`
         model
         size
         photos
-        owner {
-          id
-          profilePic
-        }
       }
     }
   }
