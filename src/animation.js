@@ -24,5 +24,19 @@ export default {
       y: 150,
       width: "350px"
     }).delay(0.9);
+  },
+  profileMenuOpen: target => {
+    TweenMax.to(target, 0.5, {
+      color: "#fff",
+      rotation: -180,
+      x: 150
+    });
+  },
+  profileMenuClose: target => {
+    TweenMax.to(target, 0.5, {
+      color: "#000",
+      rotation: -360,
+      x: 0
+    });
   }
 };

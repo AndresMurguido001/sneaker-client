@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { Consumer } from "../App";
+import animation from "../animation";
 
 const IconWithLink = () => (
   <Consumer>
@@ -18,10 +19,17 @@ const IconWithLink = () => (
 
 export default class ProfileMenu extends Component {
   state = { visible: false };
+  openMenu = React.createRef();
 
-  handleButtonClick = () => this.setState({ visible: !this.state.visible });
+  handleButtonClick = () => {
+    this.setState({ visible: !this.state.visible });
+    animation.profileMenuOpen(this.openMenu.current.children[0]);
+  };
 
-  handleSidebarHide = () => this.setState({ visible: false });
+  handleSidebarHide = () => {
+    this.setState({ visible: false });
+    animation.profileMenuClose(this.openMenu.current.children[0]);
+  };
 
   render() {
     const { visible } = this.state;
@@ -52,20 +60,17 @@ export default class ProfileMenu extends Component {
             </Link>
             <IconWithLink />
           </Sidebar>
-
+          <div ref={this.openMenu}>
+            <Icon
+              size="huge"
+              id="sideMenuIcon"
+              style={styles.icon}
+              name="chevron right"
+              onClick={this.handleButtonClick}
+            />
+          </div>
           <Sidebar.Pusher dimmed={visible}>
-            <Segment basic>
-              <Icon
-                size="huge"
-                id="sideMenuIcon"
-                style={styles.icon}
-                bordered
-                name="arrow alternate circle right"
-                onClick={this.handleButtonClick}
-              />
-
-              {this.props.children}
-            </Segment>
+            <Segment basic>{this.props.children}</Segment>
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </div>
@@ -74,12 +79,9 @@ export default class ProfileMenu extends Component {
 }
 let styles = {
   icon: {
-    color: "#fff",
     borderRadius: "50%",
-    backgroundColor: "#00c78f",
+    perspective: "800",
     position: "absolute",
-    top: "50px",
-    left: "20px",
     zIndex: "3"
   }
 };

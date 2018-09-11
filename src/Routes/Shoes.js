@@ -36,7 +36,7 @@ class Shoes extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data.loading !== this.props.data.loading) {
-      animation.shoesMainBg(this.mainImage);
+      // animation.shoesMainBg(this.mainImage);
       animation.headerAlign(this.headerWrap);
     }
   }
@@ -70,11 +70,12 @@ class Shoes extends React.Component {
         }
       </Consumer>
     );
+    // style={styles.shoesIndex.container}
 
     return (
       <ProfileMenu>
         <div style={styles.shoesIndex.shoesIndexWrap} />
-        <Container style={styles.shoesIndex.container} fluid>
+        <Container fluid>
           <div
             ref={el => (this.mainImage = el)}
             style={styles.shoesIndex.mainBgLg}

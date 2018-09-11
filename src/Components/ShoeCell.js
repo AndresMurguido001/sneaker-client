@@ -76,7 +76,7 @@ class ShoeCell extends React.Component {
     let primaryPhoto = photos ? photos[0] : null;
     let { tooLarge } = this.state;
     return (
-      <Grid.Column>
+      <Grid.Column style={{ padding: "10px 0" }}>
         <div ref={this.cardWrapper} onLoad={this.getSize}>
           <Card style={tooLarge ? style.tooLarge : null} raised>
             {this.state.likeError && (

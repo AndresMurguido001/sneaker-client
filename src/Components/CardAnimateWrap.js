@@ -12,7 +12,7 @@ class CardAnimateWrap extends React.Component {
   }
 
   handleScroll = event => {
-    if (window.scrollY >= 350) {
+    if (window.scrollY >= 100) {
       animation.shoesAppear(this.wrap.current);
       window.removeEventListener("scroll", this.handleScroll);
     }
@@ -31,8 +31,7 @@ let styles = {
   wrapper: {
     transform: "translateY(200px) rotateY(-90deg)",
     perspective: "800",
-    opacity: "0",
-    padding: "1.5rem"
+    opacity: "0"
   }
 };
 
