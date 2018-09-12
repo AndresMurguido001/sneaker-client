@@ -16,10 +16,9 @@ export default class ShoeDisplay extends React.Component {
     const { reviewModalOpen } = this.state;
     return (
       <div style={style.container}>
-        <Header as="h2" floated="left">{`${shoe.brand} - ${
+        <Header as="h1" floated="left">{`${shoe.brand} - ${
           shoe.model
         }`}</Header>
-
         <Card raised style={{ alignSelf: "flex-start" }} fluid>
           <Segment>
             <Image rounded size="big" src={shoe.photos[0]} floated="left" />
@@ -89,6 +88,7 @@ export default class ShoeDisplay extends React.Component {
           closeReviewModal={this.closeReviewModal}
           photo={shoe.photos[0]}
           shoeId={shoe.id}
+          reviews={shoe.reviews}
         />
       </div>
     );

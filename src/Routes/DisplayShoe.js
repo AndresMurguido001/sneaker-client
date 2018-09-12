@@ -23,6 +23,14 @@ let getShoeQuery = gql`
         numberOfLikes
         photos
         size
+        reviews {
+          id
+          message
+          user {
+            email
+            id
+          }
+        }
       }
     }
   }
@@ -39,9 +47,11 @@ let DisplayShoe = ({ data: { loading, getShoe } }) => {
 
   return (
     <ProfileMenu isInverted>
-      <Container style={{ height: "100vh" }}>
-        <ShoeDisplay shoe={getShoe.shoe} />
-      </Container>
+      <div style={styles.flexWrap}>
+        <Container>
+          <ShoeDisplay shoe={getShoe.shoe} />
+        </Container>
+      </div>
     </ProfileMenu>
   );
 };
@@ -55,3 +65,12 @@ export default graphql(getShoeQuery, {
     variables: { shoeId: id }
   })
 })(DisplayShoe);
+
+let styles = {
+  flexWrap: {
+    display: "flex",
+    justifyContent: "space-around",
+    height: "100%",
+    width: "100%"
+  }
+};

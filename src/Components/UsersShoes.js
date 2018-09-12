@@ -7,7 +7,7 @@ const UsersShoes = ({ profilePic, shoes }) => (
     <Header as="h3" block>
       Your Currently Listed Shoes
     </Header>
-    <Grid columns={3}>
+    <Grid style={style.grid} columns={3}>
       {shoes.map((shoe, index) => {
         return (
           <ShoeCell
@@ -22,3 +22,11 @@ const UsersShoes = ({ profilePic, shoes }) => (
   </Container>
 );
 export default UsersShoes;
+
+let style = {
+  grid: {
+    display: "flex",
+    padding: "20px 0",
+    justifyContent: "center"
+  }
+};

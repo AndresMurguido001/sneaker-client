@@ -2,11 +2,16 @@ import React from "react";
 import { Container, Header, Icon } from "semantic-ui-react";
 import CreateReviewForm from "../Containers/CreateReviewForm";
 import { Consumer } from "../App";
+import ListOfReviews from "../Containers/ListOfReviews";
 
-const ReviewFormWithUser = () => {};
-
-const Reviews = ({ photo, reviewModalOpen, closeReviewModal, shoeId }) => (
-  <div>
+const Reviews = ({
+  photo,
+  reviewModalOpen,
+  closeReviewModal,
+  shoeId,
+  reviews
+}) => (
+  <div style={{ height: "100vh" }}>
     <Consumer>
       {value => (
         <CreateReviewForm
@@ -23,6 +28,7 @@ const Reviews = ({ photo, reviewModalOpen, closeReviewModal, shoeId }) => (
         <Icon name="chevron down" />
         Reviews
       </Header>
+      <ListOfReviews shoeId={shoeId} reviews={reviews} />
     </Container>
   </div>
 );

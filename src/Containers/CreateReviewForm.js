@@ -8,6 +8,23 @@ import {
   Icon,
   Container
 } from "semantic-ui-react";
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
+
+const CreateReviewMutation = gql`
+  mutation($message: String!, $userId: Int!, $shoeId: Int!) {
+    createReview(message: $message, userId: $userId, shoeId: $shoeId) {
+      ok
+      errors {
+        path
+        message
+      }
+      review {
+        message
+      }
+    }
+  }
+`;
 
 class CreateReviewForm extends React.Component {
   state = {
@@ -17,16 +34,21 @@ class CreateReviewForm extends React.Component {
     this.setState({
       message: value
     });
-  handleSubmit = () => {
-    const { shoeId, userId } = this.props;
-    console.log(
-      "Shoe: ",
-      shoeId,
-      "User: ",
-      userId,
-      "message: ",
-      this.state.message
-    );
+  handleSubmit = async () => {
+    const { shoeId, userId, mutate } = this.props;
+    let reviewResponse = await mutate({
+      variables: {
+        userId,
+        shoeId,
+        message: this.state.message
+      }
+    });
+    console.log(reviewResponse);
+    let { ok, review } = reviewResponse.data.createReview;
+    if (ok) {
+      console.log("Review created successfully");
+    }
+    console.log(review);
   };
   render() {
     const { photo, open, onClose } = this.props;
@@ -58,4 +80,4 @@ class CreateReviewForm extends React.Component {
     );
   }
 }
-export default CreateReviewForm;
+export default graphql(CreateReviewMutation)(CreateReviewForm);
