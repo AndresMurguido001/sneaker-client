@@ -10,6 +10,7 @@ let getShoeQuery = gql`
     getShoe(shoeId: $shoeId) {
       ok
       shoe {
+        id
         brand
         model
         owner {
@@ -37,7 +38,7 @@ let DisplayShoe = ({ data: { loading, getShoe } }) => {
   }
 
   return (
-    <ProfileMenu>
+    <ProfileMenu isInverted>
       <Container style={{ height: "100vh" }}>
         <ShoeDisplay shoe={getShoe.shoe} />
       </Container>

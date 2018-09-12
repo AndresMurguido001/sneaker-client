@@ -33,6 +33,7 @@ export default class ProfileMenu extends Component {
 
   render() {
     const { visible } = this.state;
+    let { isInverted } = this.props;
     return (
       <div>
         <Sidebar.Pushable as={Segment}>
@@ -65,6 +66,7 @@ export default class ProfileMenu extends Component {
               size="huge"
               id="sideMenuIcon"
               style={styles.icon}
+              color={isInverted ? "black" : "white"}
               name="chevron right"
               onClick={this.handleButtonClick}
             />
@@ -79,6 +81,9 @@ export default class ProfileMenu extends Component {
 }
 let styles = {
   icon: {
+    color: "#fff",
+    marginLeft: "40px",
+    marginTop: "20px",
     borderRadius: "50%",
     perspective: "800",
     position: "absolute",

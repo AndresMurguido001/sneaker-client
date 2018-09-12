@@ -1,16 +1,28 @@
 import React from "react";
-import { Image, Icon, Segment, Card, Header } from "semantic-ui-react";
+import { Image, Icon, Segment, Card, Header, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import Reviews from "./Reviews";
 
-export default ({ shoe }) => {
-  return (
-    <div style={style.container}>
-      <Header as="h2" floated="left">{`${shoe.brand} - ${shoe.model}`}</Header>
+export default class ShoeDisplay extends React.Component {
+  state = {
+    reviewModalOpen: false
+  };
+  handleReviewBtnClick = () =>
+    this.setState({ reviewModalOpen: !this.state.reviewModalOpen });
 
-      <Card style={{ alignSelf: "flex-start" }} fluid>
-        <Segment>
-          <Image rounded size="big" src={shoe.photos[0]} floated="left" />
-          <Segment.Group style={style.description}>
+  closeReviewModal = () => this.setState({ reviewModalOpen: false });
+  render() {
+    let { shoe } = this.props;
+    const { reviewModalOpen } = this.state;
+    return (
+      <div style={style.container}>
+        <Header as="h2" floated="left">{`${shoe.brand} - ${
+          shoe.model
+        }`}</Header>
+
+        <Card raised style={{ alignSelf: "flex-start" }} fluid>
+          <Segment>
+            <Image rounded size="big" src={shoe.photos[0]} floated="left" />
             <Image.Group size="small" style={style.smallImgs}>
               {shoe.photos.map((img, index) => (
                 <Image
@@ -21,7 +33,7 @@ export default ({ shoe }) => {
                 />
               ))}
             </Image.Group>
-            <Card raised>
+            <Card style={{ float: "right" }} raised>
               <Card.Header as="h2" style={{ paddingLeft: "10px" }}>
                 Description
               </Card.Header>
@@ -35,26 +47,53 @@ export default ({ shoe }) => {
               <Card.Header as="h2" style={{ paddingLeft: "10px" }}>
                 Owner
               </Card.Header>
-              <Card.Content textAlign="center">
-                <p style={{ margin: "auto 0" }}>
-                  {shoe.owner.firstname} {shoe.owner.lastname}
-                </p>
-                <Link to={`/${shoe.owner.id}`}>
-                  <Image
-                    src={shoe.owner.profilePic}
-                    centered
-                    circular
-                    size="tiny"
-                  />
-                </Link>
+              <Card.Content textAlign="left">
+                <Segment>
+                  <p style={{ margin: "auto 0" }}>
+                    {shoe.owner.firstname} {shoe.owner.lastname}
+                    <Link to={`/${shoe.owner.id}`}>
+                      {shoe.owner.profilePic ? (
+                        <Image
+                          src={shoe.owner.profilePic}
+                          centered
+                          circular
+                          size="small"
+                        />
+                      ) : (
+                        <Icon
+                          style={{ float: "right" }}
+                          size="big"
+                          name="user circle outline"
+                        />
+                      )}
+                    </Link>
+                  </p>
+                </Segment>
+                <Button
+                  onClick={this.handleReviewBtnClick}
+                  style={style.button}
+                  animated
+                >
+                  <Button.Content visible>Have these Shoes?</Button.Content>
+                  <Button.Content hidden>
+                    <Icon name="star" />
+                    Leave a Review
+                  </Button.Content>
+                </Button>
               </Card.Content>
             </Card>
-          </Segment.Group>
-        </Segment>
-      </Card>
-    </div>
-  );
-};
+          </Segment>
+        </Card>
+        <Reviews
+          reviewModalOpen={reviewModalOpen}
+          closeReviewModal={this.closeReviewModal}
+          photo={shoe.photos[0]}
+          shoeId={shoe.id}
+        />
+      </div>
+    );
+  }
+}
 let style = {
   container: {
     display: "flex",
@@ -73,5 +112,11 @@ let style = {
     alignSelf: "flex-start",
     float: "right",
     padding: "10px"
+  },
+  button: {
+    textAlign: "center",
+    margin: "auto",
+    marginTop: "10px",
+    display: "block"
   }
 };

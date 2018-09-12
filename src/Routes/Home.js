@@ -22,6 +22,7 @@ let Background = styled.div`
     ),
     url(${bg});
   background-position: center;
+  background-attachment: fixed;
   background-size: cover;
   padding-top: 300px;
   clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%);

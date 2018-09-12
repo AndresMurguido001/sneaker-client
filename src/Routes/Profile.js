@@ -40,7 +40,7 @@ class MyProfile extends React.Component {
     }
     if (getUser) {
       return (
-        <ProfileMenu>
+        <ProfileMenu isInverted>
           <Container>
             <h1>{`Welcome To Your Profile ${getUser.firstname}`}</h1>
             <ProfileUser data={getUser} />

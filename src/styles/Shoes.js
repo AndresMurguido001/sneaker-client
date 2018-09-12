@@ -4,12 +4,20 @@ export default {
   shoesIndex: {
     mainBgLg: {
       height: "70vh",
-      width: "85%",
-      backgroundImage: `linear-gradient(90deg, rgba(5,25,55,0.5) 0%, rgba(0,77,122,0.5) 25%, rgba(0,135,147,0.5) 50%, rgba(0,191,114,0.5) 75%, rgba(168,235,18,0.5) 100%), url(${ShoeBg})`,
+      width: "100%",
+      background: `linear-gradient(90deg, rgba(5,25,55,0.5) 0%, rgba(0,77,122,0.5) 25%, rgba(0,135,147,0.5) 50%, rgba(0,191,114,0.5) 75%, rgba(168,235,18,0.5) 100%), url(${ShoeBg})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
+      backgroundAttachment: "fixed",
       boxShadow: "10px 10px 29px -12px rgba(0,0,0,0.75)",
       margin: "auto"
+    },
+    headerWrap: {
+      display: "flex",
+      flexDirection: "column",
+      width: "500px",
+      paddingTop: "6rem",
+      paddingLeft: "6rem"
     },
     primaryHeader: {
       textShadow: "2px 2px 11px rgba(0, 0, 0, 0.5)",

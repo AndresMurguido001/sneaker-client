@@ -1,12 +1,18 @@
 import React from "react";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
-import { Container, Grid, Dimmer, Loader, Header } from "semantic-ui-react";
+import {
+  Container,
+  Dimmer,
+  Loader,
+  Header,
+  Icon,
+  Grid
+} from "semantic-ui-react";
 import ShoeCell from "../Components/ShoeCell";
 import ProfileMenu from "../Components/ProfileMenu.js";
 import { Consumer } from "../App";
 //Style
-import animation from "../animation";
 import styles from "../styles/Shoes";
 import CardAnimateWrap from "../Components/CardAnimateWrap";
 
@@ -29,18 +35,6 @@ export const AllShoesQuery = gql`
 `;
 
 class Shoes extends React.Component {
-  constructor() {
-    super();
-    this.mainImage = null;
-    this.headerWrap = null;
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.data.loading !== this.props.data.loading) {
-      // animation.shoesMainBg(this.mainImage);
-      animation.headerAlign(this.headerWrap);
-    }
-  }
-
   render() {
     const {
       data: { loading, getAllShoes }
@@ -70,47 +64,70 @@ class Shoes extends React.Component {
         }
       </Consumer>
     );
-    // style={styles.shoesIndex.container}
 
     return (
       <ProfileMenu>
-        <div style={styles.shoesIndex.shoesIndexWrap} />
         <Container fluid>
           <div
             ref={el => (this.mainImage = el)}
             style={styles.shoesIndex.mainBgLg}
           >
-            <Container>
-              <div ref={el => (this.headerWrap = el)}>
-                <Header
-                  style={styles.shoesIndex.primaryHeader}
-                  inverted
-                  textAlign="center"
-                >
-                  Welcome To Our Store
-                </Header>
-                <Header
-                  style={styles.shoesIndex.secondaryHeader}
-                  inverted
-                  textAlign="left"
-                  sub
-                >
-                  Shoes for any occassion. Sneakerhead store allows anyone to
-                  sell new shoes. Anyone from a retailer to individuals share
-                  their shoes with the world.
-                </Header>
-              </div>
-            </Container>
+            <div
+              style={styles.shoesIndex.headerWrap}
+              ref={el => (this.headerWrap = el)}
+            >
+              <Header
+                style={styles.shoesIndex.primaryHeader}
+                inverted
+                textAlign="left"
+              >
+                Welcome To Our Store
+              </Header>
+              <Header
+                style={styles.shoesIndex.secondaryHeader}
+                inverted
+                textAlign="left"
+                sub
+              >
+                Shoes for any occassion. Sneakerhead store allows anyone to sell
+                new shoes. Anyone from a retailer to individuals share their
+                shoes with the world.
+              </Header>
+            </div>
           </div>
 
           {/* Figure Out how to get uploaded shoe to display on index after being created */}
-          <Grid style={styles.shoesIndex.grid} columns={4} stackable={true}>
+        </Container>
+
+        <Header as="h2" attached="top" block>
+          <Icon name="chevron down" />
+          Currently Listed Shoes
+        </Header>
+        <div style={style.flex}>
+          <Grid style={style.gridContainer} columns="4">
             <ShoeCells />
           </Grid>
-        </Container>
+        </div>
       </ProfileMenu>
     );
   }
 }
+let style = {
+  flex: {
+    display: "flex",
+    width: "100%",
+    float: "left",
+    justifyContent: "center",
+    padding: "2rem 0",
+    margin: "2rem 0",
+    background:
+      "linear-gradient(to bottom, rgba(50,166,255,1) 0%,rgba(156,223,229,1) 50%,rgba(255,255,255,1) 100%)",
+    flexWrap: "wrap"
+  },
+  gridContainer: {
+    margin: "auto",
+    width: "90%"
+  }
+};
 
 export default graphql(AllShoesQuery)(Shoes);
