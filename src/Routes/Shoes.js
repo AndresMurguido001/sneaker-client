@@ -14,7 +14,6 @@ import ProfileMenu from "../Components/ProfileMenu.js";
 import { Consumer } from "../App";
 //Style
 import styles from "../styles/Shoes";
-import CardAnimateWrap from "../Components/CardAnimateWrap";
 
 export const AllShoesQuery = gql`
   query {
@@ -30,6 +29,7 @@ export const AllShoesQuery = gql`
       size
       description
       photos
+      averageRating
     }
   }
 `;
@@ -51,15 +51,13 @@ class Shoes extends React.Component {
       <Consumer>
         {value =>
           getAllShoes.map((shoe, index) => (
-            <CardAnimateWrap key={`${shoe.brand}-${index}`}>
-              <ShoeCell
-                currentUser={value}
-                key={`shoe-${shoe.model}-${index}`}
-                profileImg={shoe.owner.profilePic}
-                shoe={shoe}
-                index={index}
-              />
-            </CardAnimateWrap>
+            <ShoeCell
+              currentUser={value}
+              key={`shoe-${shoe.model}-${index}`}
+              profileImg={shoe.owner.profilePic}
+              shoe={shoe}
+              index={index}
+            />
           ))
         }
       </Consumer>

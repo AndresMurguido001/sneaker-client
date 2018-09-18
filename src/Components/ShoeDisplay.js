@@ -2,6 +2,7 @@ import React from "react";
 import { Image, Icon, Segment, Card, Header, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import Reviews from "./Reviews";
+import ReactStars from "react-stars";
 
 export default class ShoeDisplay extends React.Component {
   state = {
@@ -13,6 +14,7 @@ export default class ShoeDisplay extends React.Component {
   closeReviewModal = () => this.setState({ reviewModalOpen: false });
   render() {
     let { shoe } = this.props;
+
     const { reviewModalOpen } = this.state;
     return (
       <div style={style.container}>
@@ -67,6 +69,14 @@ export default class ShoeDisplay extends React.Component {
                       )}
                     </Link>
                   </p>
+                  <span style={{ display: "inline" }}>
+                    <ReactStars
+                      count={5}
+                      value={shoe.averageRating}
+                      edit={false}
+                    />
+                    {`(${shoe.reviews.length})`}
+                  </span>
                 </Segment>
                 <Button
                   onClick={this.handleReviewBtnClick}

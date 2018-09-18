@@ -13,6 +13,7 @@ let getShoeQuery = gql`
         id
         brand
         model
+        averageRating
         owner {
           id
           profilePic

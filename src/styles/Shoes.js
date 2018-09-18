@@ -15,9 +15,9 @@ export default {
     headerWrap: {
       display: "flex",
       flexDirection: "column",
-      width: "500px",
+      width: "400px",
       paddingTop: "6rem",
-      paddingLeft: "6rem"
+      paddingLeft: "2rem"
     },
     primaryHeader: {
       textShadow: "2px 2px 11px rgba(0, 0, 0, 0.5)",

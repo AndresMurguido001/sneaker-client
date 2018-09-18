@@ -42,12 +42,19 @@ export default class ProfileMenu extends Component {
         borderRadius: "50%",
         perspective: "800",
         position: "absolute",
-        zIndex: "3"
+        zIndex: "5"
+      },
+      fullScreen: {
+        height: "100%",
+        width: "100%",
+        position: "absolute",
+        left: 0,
+        top: 0
       }
     };
     return (
       <div>
-        <Sidebar.Pushable as={Segment}>
+        <Sidebar.Pushable style={styles.fullScreen} as={Segment}>
           <Sidebar
             as={Menu}
             animation="overlay"
@@ -81,9 +88,13 @@ export default class ProfileMenu extends Component {
               onClick={this.handleButtonClick}
             />
           </div>
-          <Sidebar.Pusher dimmed={visible}>
-            {this.props.children}
-          </Sidebar.Pusher>
+          <div>
+            <Sidebar.Pusher
+              children={this.props.children}
+              style={styles.fullHeight}
+              dimmed={visible}
+            />
+          </div>
         </Sidebar.Pushable>
       </div>
     );

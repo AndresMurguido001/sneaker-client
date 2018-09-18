@@ -6,6 +6,7 @@ import { graphql } from "react-apollo";
 import { AllShoesQuery } from "../Routes/Shoes";
 import { Message } from "semantic-ui-react";
 import EvenImage from "../Components/EvenImage";
+import ReactStars from "react-stars";
 
 let LikeShoeMutation = gql`
   mutation($shoeId: Int!, $userId: Int!) {
@@ -67,13 +68,15 @@ class ShoeCell extends React.Component {
         description,
         numberOfLikes,
         size,
-        owner
+        owner,
+        averageRating
       },
       profileImg,
       usersProfile
     } = this.props;
     let primaryPhoto = photos ? photos[0] : null;
     let { tooLarge } = this.state;
+    console.log(tooLarge);
     return (
       <div
         style={style.cardContainer}
@@ -108,8 +111,13 @@ class ShoeCell extends React.Component {
               </Link>
             )}
             <Card.Header>{model}</Card.Header>
-            <Card.Meta>{brand}</Card.Meta>
-            <Card.Description>
+            <Card.Meta style={{ display: "flex" }}>
+              {brand}
+              <span style={{ marginLeft: "1rem" }}>
+                <ReactStars count={5} value={averageRating} edit={false} />
+              </span>
+            </Card.Meta>
+            <Card.Description style={{ overflowY: "hidden" }}>
               <p>{description}</p>
             </Card.Description>
           </Card.Content>
@@ -131,7 +139,7 @@ class ShoeCell extends React.Component {
 }
 let style = {
   tooLarge: {
-    height: "327px"
+    height: "347px"
   },
   cardExtra: {
     padding: "10px"

@@ -21,6 +21,7 @@ let meQuery = gql`
         model
         size
         photos
+        averageRating
       }
     }
   }

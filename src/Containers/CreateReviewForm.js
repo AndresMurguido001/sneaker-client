@@ -8,12 +8,24 @@ import {
   Icon,
   Container
 } from "semantic-ui-react";
-import { graphql } from "react-apollo";
+import { graphql, compose } from "react-apollo";
+import ReactStars from "react-stars";
 import gql from "graphql-tag";
+import { withRouter } from "react-router-dom";
 
 const CreateReviewMutation = gql`
-  mutation($message: String!, $userId: Int!, $shoeId: Int!) {
-    createReview(message: $message, userId: $userId, shoeId: $shoeId) {
+  mutation(
+    $message: String!
+    $userId: Int!
+    $shoeId: Int!
+    $starRating: Float
+  ) {
+    createReview(
+      message: $message
+      userId: $userId
+      shoeId: $shoeId
+      starRating: $starRating
+    ) {
       ok
       errors {
         path
@@ -28,7 +40,14 @@ const CreateReviewMutation = gql`
 
 class CreateReviewForm extends React.Component {
   state = {
-    message: ""
+    message: "",
+    starRating: 0
+  };
+
+  ratingChanged = newRating => {
+    this.setState({
+      starRating: newRating
+    });
   };
   handleChange = (e, { value }) =>
     this.setState({
@@ -40,13 +59,14 @@ class CreateReviewForm extends React.Component {
       variables: {
         userId,
         shoeId,
-        message: this.state.message
+        message: this.state.message,
+        starRating: this.state.starRating
       }
     });
     console.log(reviewResponse);
     let { ok, review } = reviewResponse.data.createReview;
     if (ok) {
-      console.log("Review created successfully");
+      this.props.onClose();
     }
     console.log(review);
   };
@@ -61,6 +81,12 @@ class CreateReviewForm extends React.Component {
             <Container>
               <Form onSubmit={this.handleSubmit}>
                 <Header>Shoes brand/title</Header>
+                <ReactStars
+                  value={this.state.starRating}
+                  count={5}
+                  onChange={this.ratingChanged}
+                  size={24}
+                />
                 <Form.TextArea
                   onChange={this.handleChange}
                   label="Review"
@@ -80,4 +106,7 @@ class CreateReviewForm extends React.Component {
     );
   }
 }
-export default graphql(CreateReviewMutation)(CreateReviewForm);
+export default compose(
+  withRouter,
+  graphql(CreateReviewMutation)
+)(CreateReviewForm);
