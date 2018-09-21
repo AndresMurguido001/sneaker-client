@@ -116,6 +116,11 @@ class App extends Component {
           <Router>
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route
+                exact
+                path="/shoes/query/:searchQuery?"
+                component={Shoes}
+              />
               <Route exact path="/shoes" component={Shoes} />
               <PrivateRoute exact path="/:id" component={MyProfile} />
               <PrivateRoute exact path="/shoes/:id" component={DisplayShoe} />

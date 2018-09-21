@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql } from "react-apollo";
+import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import {
   Container,
@@ -7,17 +7,19 @@ import {
   Loader,
   Header,
   Icon,
-  Grid
+  Grid,
+  Form
 } from "semantic-ui-react";
 import ShoeCell from "../Components/ShoeCell";
 import ProfileMenu from "../Components/ProfileMenu.js";
 import { Consumer } from "../App";
+import { withRouter } from "react-router-dom";
 //Style
 import styles from "../styles/Shoes";
-
+// Create SearchBar Component
 export const AllShoesQuery = gql`
-  query {
-    getAllShoes {
+  query($searchBy: String) {
+    getAllShoes(searchBy: $searchBy) {
       id
       brand
       owner {
@@ -33,8 +35,20 @@ export const AllShoesQuery = gql`
     }
   }
 `;
-
 class Shoes extends React.Component {
+  state = {
+    searching: false,
+    searchQuery: ""
+  };
+
+  handleChange = e => {
+    this.setState({ searchQuery: e.target.value });
+  };
+  handleSubmit = () => {
+    console.log(this.state);
+    return this.props.history.push(`/shoes/query/${this.state.searchQuery}`);
+  };
+
   render() {
     const {
       data: { loading, getAllShoes }
@@ -62,7 +76,7 @@ class Shoes extends React.Component {
         }
       </Consumer>
     );
-
+    let { searchQuery } = this.state;
     return (
       <ProfileMenu>
         <Container fluid>
@@ -70,6 +84,15 @@ class Shoes extends React.Component {
             ref={el => (this.mainImage = el)}
             style={styles.shoesIndex.mainBgLg}
           >
+            <Form onSubmit={this.handleSubmit} style={styles.searchBar}>
+              <Form.Input
+                icon="search"
+                iconPosition="left"
+                placeholder="Search our shoes..."
+                value={searchQuery}
+                onChange={this.handleChange}
+              />
+            </Form>
             <div
               style={styles.shoesIndex.headerWrap}
               ref={el => (this.headerWrap = el)}
@@ -128,4 +151,17 @@ let style = {
   }
 };
 
-export default graphql(AllShoesQuery)(Shoes);
+export default compose(
+  graphql(AllShoesQuery, {
+    options: ({
+      match: {
+        params: { searchQuery }
+      }
+    }) => ({
+      variables: {
+        searchBy: searchQuery
+      }
+    })
+  }),
+  withRouter
+)(Shoes);

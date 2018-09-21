@@ -76,7 +76,6 @@ class ShoeCell extends React.Component {
     } = this.props;
     let primaryPhoto = photos ? photos[0] : null;
     let { tooLarge } = this.state;
-    console.log(tooLarge);
     return (
       <div
         style={style.cardContainer}

@@ -49,5 +49,19 @@ export default {
       boxShadow: "10px 10px 29px -12px rgba(0,0,0,0.75)"
     }
   },
-  shineEffect: {}
+  searchBar: {
+    width: "20rem",
+    float: "right",
+    boxShadow: "10px 10px 29px -12px rgba(0,0,0,0.75)",
+    margin: "20px 10px 0 0"
+  },
+  searchContainer: {
+    // opacity: "0",
+    // transform: "scale(0)"
+  },
+  searchIcon: {
+    color: "#fff",
+    float: "right",
+    margin: "10px 10px 0 0"
+  }
 };
