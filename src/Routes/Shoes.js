@@ -61,21 +61,32 @@ class Shoes extends React.Component {
       );
     }
 
-    let ShoeCells = () => (
-      <Consumer>
-        {value =>
-          getAllShoes.map((shoe, index) => (
-            <ShoeCell
-              currentUser={value}
-              key={`shoe-${shoe.model}-${index}`}
-              profileImg={shoe.owner.profilePic}
-              shoe={shoe}
-              index={index}
-            />
-          ))
-        }
-      </Consumer>
-    );
+    let ShoeCells = () => {
+      if (getAllShoes.length > 0) {
+        return (
+          <Consumer>
+            {value =>
+              getAllShoes.map((shoe, index) => (
+                <ShoeCell
+                  currentUser={value}
+                  key={`shoe-${shoe.model}-${index}`}
+                  profileImg={shoe.owner.profilePic}
+                  shoe={shoe}
+                  index={index}
+                />
+              ))
+            }
+          </Consumer>
+        );
+      }
+      return (
+        <Header
+          as="h2"
+          textAlign="center"
+          content="Sorry, no shoes have been posted yet"
+        />
+      );
+    };
     let { searchQuery } = this.state;
     return (
       <ProfileMenu>

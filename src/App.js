@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import "./index.css";
 import { ApolloClient } from "apollo-client";
 import { ApolloProvider } from "react-apollo";
-import { ApolloLink } from "apollo-link";
+import { ApolloLink, split } from "apollo-link";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-boost";
+import { getMainDefinition } from "apollo-utilities";
 import {
   BrowserRouter as Router,
   Route,
@@ -12,6 +13,8 @@ import {
   Redirect
 } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+
+import { WebSocketLink } from "apollo-link-ws";
 //Routes
 import Home from "./Routes/Home";
 import MyProfile from "./Routes/Profile";
@@ -19,6 +22,18 @@ import Shoes from "./Routes/Shoes";
 import DisplayShoe from "./Routes/DisplayShoe";
 
 const httpLink = createHttpLink({ uri: "http://localhost:8080/graphql" });
+
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:8080/subscriptions`,
+  options: {
+    reconnect: true,
+    lazy: true,
+    connectionParams: () => ({
+      token: localStorage.getItem("token"),
+      refreshToken: localStorage.getItem("refreshToken")
+    })
+  }
+});
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext({
@@ -59,6 +74,7 @@ const isAuthenticated = () => {
     let {
       user: { id }
     } = jwt_decode(token);
+    console.log("ISAUTHETICATED: ", id);
     currentUser = id;
     const { exp } = jwt_decode(refreshToken);
     if (Date.now() / 1000 > exp) {
@@ -98,7 +114,19 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
-const link = afterwareLink.concat(authMiddleware.concat(httpLink));
+const linkWithMiddleware = afterwareLink.concat(
+  authMiddleware.concat(httpLink)
+);
+
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === "OperationDefinition" && operation === "subscription";
+  },
+  wsLink,
+  linkWithMiddleware
+);
 
 let client = new ApolloClient({
   link: link,

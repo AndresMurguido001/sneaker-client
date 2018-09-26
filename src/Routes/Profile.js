@@ -5,6 +5,8 @@ import ProfileUser from "../Containers/ProfileUser";
 import { Container, Loader, Dimmer } from "semantic-ui-react";
 import ProfileMenu from "../Components/ProfileMenu";
 import { Redirect } from "react-router-dom";
+import MessageContainer from "../Components/MessageContainer";
+import { Consumer } from "../App";
 
 let meQuery = gql`
   query($id: String!) {
@@ -14,6 +16,9 @@ let meQuery = gql`
       firstname
       lastname
       profilePic
+      channels {
+        id
+      }
       shoes {
         brand
         numberOfLikes
@@ -28,10 +33,14 @@ let meQuery = gql`
 `;
 
 class MyProfile extends React.Component {
+  state = {
+    active: false
+  };
   render() {
     let {
       data: { loading, getUser }
     } = this.props;
+
     if (loading) {
       return (
         <Dimmer active>
@@ -44,6 +53,15 @@ class MyProfile extends React.Component {
         <ProfileMenu isInverted>
           <Container>
             <h1>{`Welcome To Your Profile ${getUser.firstname}`}</h1>
+            <Consumer>
+              {value => (
+                <MessageContainer
+                  receiverId={getUser.id}
+                  currentUserId={value}
+                  currentConversations={getUser.channels}
+                />
+              )}
+            </Consumer>
             <ProfileUser data={getUser} />
           </Container>
         </ProfileMenu>
