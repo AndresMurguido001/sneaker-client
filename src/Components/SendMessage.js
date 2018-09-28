@@ -2,6 +2,23 @@ import React from "react";
 import { Form } from "semantic-ui-react";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
+import styled, { css } from "styled-components";
+
+const InputElement = styled.div`
+  position: fixed;
+  bottom: 40px;
+  width: 18rem;
+  right: 40px;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+  ${props =>
+    props.visible &&
+    props.channelId &&
+    css`
+      opacity: 1;
+    `};
+`;
 
 const createMessageMutation = gql`
   mutation($channelId: Int!, $text: String!) {
@@ -22,11 +39,16 @@ class SendMessage extends React.Component {
 
   render() {
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Input
-          onChange={e => this.setState({ message: e.target.value })}
-        />
-      </Form>
+      <InputElement
+        visible={this.props.visible}
+        channelId={this.props.channelId}
+      >
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Input
+            onChange={e => this.setState({ message: e.target.value })}
+          />
+        </Form>
+      </InputElement>
     );
   }
 }

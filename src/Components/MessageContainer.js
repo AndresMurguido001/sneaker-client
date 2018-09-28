@@ -1,18 +1,34 @@
 import React from "react";
 import { Container, Header, Icon, Button } from "semantic-ui-react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import PrivateMessage from "./PrivateMessage";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
+import SendMessage from "./SendMessage";
 
 const MessageWrapper = styled.div`
   position: fixed;
   bottom: 30px;
   right: 30px;
   width: 20rem;
+  min-height: 300px;
+  max-height: 400px;
+  overflow-y: scroll;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   z-index: 2;
+  opacity: 0;
+  transform-origin: bottom right;
+  transform: scale(0);
+  opacity: 0;
+  transition: all 300ms ease-in;
+  ${props =>
+    props.open &&
+    css`
+      transform: scale(1);
+      opacity: 1;
+      transition: all 300ms ease-in;
+    `};
 `;
 
 const createChannelMutation = gql`
@@ -24,6 +40,10 @@ const createChannelMutation = gql`
 `;
 
 class MessageContainer extends React.Component {
+  state = {
+    selectedCell: 0,
+    visible: false
+  };
   handleClick = async () =>
     await this.props.mutate({
       variables: {
@@ -31,6 +51,10 @@ class MessageContainer extends React.Component {
         receiverId: this.props.receiverId
       }
     });
+
+  handleSelectedCell = convoId => {
+    this.setState({ selectedCell: convoId, visible: true });
+  };
 
   render() {
     let { currentConversations, receiverId, currentUserId } = this.props;
@@ -55,20 +79,35 @@ class MessageContainer extends React.Component {
     return (
       <div>
         <CreateChannelButton />
-        <MessageWrapper>
-          <Container fluid style={{ padding: "10px" }}>
+        <MessageWrapper open={this.props.open}>
+          <Container style={{ padding: "10px" }}>
             <Header as="h3" dividing>
               Your current conversations
             </Header>
-            <ul>
-              {currentConversations.map(convo => (
-                <li key={`conversation-#${convo.id}`}>
-                  <PrivateMessage conversationId={convo.id} />
-                </li>
-              ))}
-            </ul>
+            {currentConversations.map(convo => (
+              <PrivateMessage
+                key={convo.id}
+                handleCellClicked={() => {
+                  this.handleSelectedCell(convo.id);
+                }}
+                currentUser={this.props.currentUserId}
+                conversationId={convo.id}
+                currentlySelected={this.state.selectedCell}
+              />
+            ))}
           </Container>
         </MessageWrapper>
+        <SendMessage
+          visible={this.props.open}
+          channelId={this.state.selectedCell}
+        />
+        <Button
+          circular
+          onClick={this.props.onMessageClick}
+          size="massive"
+          floated="right"
+          icon="mail"
+        />
       </div>
     );
   }

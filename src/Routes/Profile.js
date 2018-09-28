@@ -34,7 +34,7 @@ let meQuery = gql`
 
 class MyProfile extends React.Component {
   state = {
-    active: false
+    open: false
   };
   render() {
     let {
@@ -58,6 +58,10 @@ class MyProfile extends React.Component {
                 <MessageContainer
                   receiverId={getUser.id}
                   currentUserId={value}
+                  open={this.state.open}
+                  onMessageClick={() =>
+                    this.setState({ open: !this.state.open })
+                  }
                   currentConversations={getUser.channels}
                 />
               )}

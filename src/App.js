@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./index.css";
 import { ApolloClient } from "apollo-client";
 import { ApolloProvider } from "react-apollo";
-import { ApolloLink, split } from "apollo-link";
-import { createHttpLink } from "apollo-link-http";
+import { ApolloLink, split, concat } from "apollo-link";
+import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-boost";
 import { getMainDefinition } from "apollo-utilities";
 import {
@@ -21,10 +21,10 @@ import MyProfile from "./Routes/Profile";
 import Shoes from "./Routes/Shoes";
 import DisplayShoe from "./Routes/DisplayShoe";
 
-const httpLink = createHttpLink({ uri: "http://localhost:8080/graphql" });
+const httpLink = new HttpLink({ uri: "http://localhost:8080/graphql" });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:8080/subscriptions`,
+  uri: "ws://localhost:8080/subscriptions",
   options: {
     reconnect: true,
     lazy: true,
@@ -65,6 +65,12 @@ const afterwareLink = new ApolloLink((operation, forward) => {
     return response;
   });
 });
+const linkWithMiddleware = afterwareLink.concat(
+  authMiddleware.concat(httpLink)
+);
+// const linkWithMiddleware = afterwareLink.concat(
+//   authMiddleware.concat(httpLink)
+// );
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("token");
@@ -74,7 +80,6 @@ const isAuthenticated = () => {
     let {
       user: { id }
     } = jwt_decode(token);
-    console.log("ISAUTHETICATED: ", id);
     currentUser = id;
     const { exp } = jwt_decode(refreshToken);
     if (Date.now() / 1000 > exp) {
@@ -112,10 +117,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       }
     }}
   />
-);
-
-const linkWithMiddleware = afterwareLink.concat(
-  authMiddleware.concat(httpLink)
 );
 
 const link = split(
