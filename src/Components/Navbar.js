@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+import { Consumer } from "../App";
 import styled from "styled-components";
+import { Icon } from "semantic-ui-react";
 
 let NavWrap = styled.div`
   width: 100vw;
@@ -21,80 +22,50 @@ let Nav = styled.ul`
 let NavItem = styled.li`
   color: #fff;
   font-size: 1.5em;
+  transform: scale(1);
+  transition: transform 200ms ease-in;
+  transform-origin: center;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: transform 200ms ease-in;
+  }
 `;
 
-export const HomeNav = () => {
-  let token = localStorage.getItem("token");
-  let currentUserId;
-  if (token) {
-    let {
-      user: { id }
-    } = jwt_decode(token);
-    currentUserId = id;
-  }
+export const HomeNav = ({ handleLoginClick }) => {
   return (
-    <NavWrap>
-      <Nav>
-        <Link to="/">
-          <NavItem>Home</NavItem>
-        </Link>
-        <Link to="/shoes">
-          <NavItem>Shop</NavItem>
-        </Link>
-        <Link to={`/${currentUserId}`}>
-          <NavItem>Profile</NavItem>
-        </Link>
-      </Nav>
-    </NavWrap>
+    <Consumer>
+      {value => (
+        <NavWrap>
+          <Nav>
+            <Link to="/">
+              <NavItem>
+                <Icon name="home" />
+                Home
+              </NavItem>
+            </Link>
+            <Link to="/shoes">
+              <NavItem>
+                <Icon name="shopping bag" />
+                Shop
+              </NavItem>
+            </Link>
+            {value > 0 ? (
+              <Link to={`/${value}`}>
+                <NavItem>
+                  <Icon name="user" />
+                  Profile
+                </NavItem>
+              </Link>
+            ) : (
+              <NavItem onClick={() => handleLoginClick()}>
+                <Icon name="arrow right" />
+                Login
+              </NavItem>
+            )}
+          </Nav>
+        </NavWrap>
+      )}
+    </Consumer>
   );
 };
-
-// export const HomeNav = () => {
-//   let token = localStorage.getItem("token");
-//   let currentUserId;
-//   if (token) {
-//     let {
-//       user: { id }
-//     } = jwt_decode(token);
-//     currentUserId = id;
-//   }
-//   return (
-//     <Grid
-//       columns={token ? 3 : 2}
-//       style={{
-//         width: "50%",
-//         float: "right",
-//         fontSize: "20px",
-//         padding: "10px 20px"
-//       }}
-//       textAlign="right"
-//     >
-//       <Grid.Row>
-//         <Grid.Column>
-//           <Link style={{ textDecoration: "none", color: "#000" }} to="/">
-//             {" "}
-//             <Icon name="home" />
-//             Home{" "}
-//           </Link>
-//         </Grid.Column>
-//         {token ? (
-//           <Grid.Column>
-//             <Link
-//               style={{ textDecoration: "none", color: "#000" }}
-//               to={`/${currentUserId}`}
-//             >
-//               <Icon name="user circle outline" />
-//               Profile
-//             </Link>
-//           </Grid.Column>
-//         ) : null}
-//         <Grid.Column>
-//           <Link style={{ textDecoration: "none", color: "#000" }} to="/shoes">
-//             <Icon name="shop" />
-//             Shop
-//           </Link>
-//         </Grid.Column>
-//       </Grid.Row>
-//     </Grid>
-//   );
-// };

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { Consumer } from "../App";
-import animation from "../animation";
+import { IconWrapper, SideBarWrapper } from "../styles/ShoesIndex";
 
 const IconWithLink = () => (
   <Consumer>
@@ -19,16 +19,13 @@ const IconWithLink = () => (
 
 export default class ProfileMenu extends Component {
   state = { visible: false };
-  openMenu = React.createRef();
 
   handleButtonClick = () => {
     this.setState({ visible: !this.state.visible });
-    animation.profileMenuOpen(this.openMenu.current.children[0]);
   };
 
   handleSidebarHide = () => {
     this.setState({ visible: false });
-    animation.profileMenuClose(this.openMenu.current.children[0]);
   };
 
   render() {
@@ -53,7 +50,7 @@ export default class ProfileMenu extends Component {
       }
     };
     return (
-      <div>
+      <SideBarWrapper>
         <Sidebar.Pushable style={styles.fullScreen} as={Segment}>
           <Sidebar
             as={Menu}
@@ -79,7 +76,7 @@ export default class ProfileMenu extends Component {
             </Link>
             <IconWithLink />
           </Sidebar>
-          <div ref={this.openMenu}>
+          <IconWrapper visible={this.state.visible}>
             <Icon
               size="huge"
               id="sideMenuIcon"
@@ -87,7 +84,7 @@ export default class ProfileMenu extends Component {
               name="chevron right"
               onClick={this.handleButtonClick}
             />
-          </div>
+          </IconWrapper>
           <div>
             <Sidebar.Pusher
               children={this.props.children}
@@ -96,7 +93,7 @@ export default class ProfileMenu extends Component {
             />
           </div>
         </Sidebar.Pushable>
-      </div>
+      </SideBarWrapper>
     );
   }
 }

@@ -5,12 +5,12 @@ import bg from "../images/ProfileBg.jpg";
 import UsersShoes from "../Components/UsersShoes";
 import UploadShoe from "../Containers/UploadShoe";
 import UploadProfilePic from "../Containers/UploadProfilePic";
-import jwt_decode from "jwt-decode";
 
 class ProfileUser extends React.Component {
   render() {
     let {
-      data: { id, firstname, lastname, email, shoes, profilePic }
+      data: { id, firstname, lastname, email, shoes, profilePic },
+      currentUser
     } = this.props;
 
     let hasShoes = shoes.length > 0 ? true : false;
@@ -20,7 +20,6 @@ class ProfileUser extends React.Component {
     let likesArr = hasShoes ? shoes.map(shoe => shoe.numberOfLikes) : null;
     let totalLikes = hasShoes ? likesArr.reduce((acc, cv) => acc + cv) : 0;
 
-    let isCurrentUser = jwt_decode(localStorage.getItem("token"));
     return (
       <div>
         <Grid columns={3} padded="horizontally">
@@ -137,13 +136,12 @@ class ProfileUser extends React.Component {
           </Grid.Column>
         </Grid>
         <Container>
-          {isCurrentUser.user.id === id ? (
+          {currentUser === id ? (
             <div>
               <UploadProfilePic />
-              <UploadShoe userId={id} />
+              <UploadShoe userId={currentUser} />
             </div>
           ) : null}
-
           <UsersShoes profilePic={profilePic} shoes={shoes} />
         </Container>
       </div>

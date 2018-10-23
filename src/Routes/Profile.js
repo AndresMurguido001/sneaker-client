@@ -3,11 +3,13 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import ProfileUser from "../Containers/ProfileUser";
 import { Container, Loader, Dimmer } from "semantic-ui-react";
-import ProfileMenu from "../Components/ProfileMenu";
+// import ProfileMenu from "../Components/ProfileMenu";
 import { Redirect } from "react-router-dom";
 import MessageContainer from "../Components/MessageContainer";
 import { Consumer } from "../App";
+import RightSideBar from "../Components/RightSideBar";
 
+// Redo Profile Menu Component
 let meQuery = gql`
   query($id: String!) {
     getUser(id: $id) {
@@ -50,25 +52,31 @@ class MyProfile extends React.Component {
     }
     if (getUser) {
       return (
-        <ProfileMenu isInverted>
+        <div>
+          <RightSideBar />
           <Container>
             <h1>{`Welcome To Your Profile ${getUser.firstname}`}</h1>
             <Consumer>
               {value => (
-                <MessageContainer
-                  receiverId={getUser.id}
-                  currentUserId={value}
-                  open={this.state.open}
-                  onMessageClick={() =>
-                    this.setState({ open: !this.state.open })
-                  }
-                  currentConversations={getUser.channels}
-                />
+                <div>
+                  <MessageContainer
+                    receiverId={getUser.id}
+                    currentUserId={value}
+                    open={this.state.open}
+                    onMessageClick={() =>
+                      this.setState({ open: !this.state.open })
+                    }
+                    currentConversations={getUser.channels}
+                    handleClose={() => {
+                      this.setState({ open: false });
+                    }}
+                  />
+                  <ProfileUser currentUser={value} data={getUser} />
+                </div>
               )}
             </Consumer>
-            <ProfileUser data={getUser} />
           </Container>
-        </ProfileMenu>
+        </div>
       );
     } else {
       return <Redirect to="/" />;

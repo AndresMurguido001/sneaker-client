@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./index.css";
 import { ApolloClient } from "apollo-client";
 import { ApolloProvider } from "react-apollo";
-import { ApolloLink, split, concat } from "apollo-link";
+import { ApolloLink, split } from "apollo-link";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-boost";
 import { getMainDefinition } from "apollo-utilities";
@@ -68,9 +68,6 @@ const afterwareLink = new ApolloLink((operation, forward) => {
 const linkWithMiddleware = afterwareLink.concat(
   authMiddleware.concat(httpLink)
 );
-// const linkWithMiddleware = afterwareLink.concat(
-//   authMiddleware.concat(httpLink)
-// );
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("token");
@@ -120,7 +117,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 );
 
 const link = split(
-  // split based on operation type
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query);
     return kind === "OperationDefinition" && operation === "subscription";
@@ -147,7 +143,7 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route
                 exact
-                path="/shoes/query/:searchQuery?"
+                path="/shoes/search/:searchQuery?"
                 component={Shoes}
               />
               <Route exact path="/shoes" component={Shoes} />

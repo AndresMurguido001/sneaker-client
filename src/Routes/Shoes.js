@@ -6,7 +6,6 @@ import {
   Dimmer,
   Loader,
   Header,
-  Icon,
   Grid,
   Form
 } from "semantic-ui-react";
@@ -15,8 +14,14 @@ import ProfileMenu from "../Components/ProfileMenu.js";
 import { Consumer } from "../App";
 import { withRouter } from "react-router-dom";
 //Style
+import NoShoes from "../Components/NoShoes";
 import styles from "../styles/Shoes";
+import styled from "styled-components";
 // Create SearchBar Component
+
+const ShoesBackground = styled.div`
+  background-color: rgba(16, 12, 32, 0.7);
+`;
 export const AllShoesQuery = gql`
   query($searchBy: String) {
     getAllShoes(searchBy: $searchBy) {
@@ -45,8 +50,7 @@ class Shoes extends React.Component {
     this.setState({ searchQuery: e.target.value });
   };
   handleSubmit = () => {
-    console.log(this.state);
-    return this.props.history.push(`/shoes/query/${this.state.searchQuery}`);
+    return this.props.history.push(`/shoes/search/${this.state.searchQuery}`);
   };
 
   render() {
@@ -79,67 +83,56 @@ class Shoes extends React.Component {
           </Consumer>
         );
       }
-      return (
-        <Header
-          as="h2"
-          textAlign="center"
-          content="Sorry, no shoes have been posted yet"
-        />
-      );
+      return <NoShoes />;
     };
     let { searchQuery } = this.state;
     return (
       <ProfileMenu>
-        <Container fluid>
-          <div
-            ref={el => (this.mainImage = el)}
-            style={styles.shoesIndex.mainBgLg}
-          >
-            <Form onSubmit={this.handleSubmit} style={styles.searchBar}>
-              <Form.Input
-                icon="search"
-                iconPosition="left"
-                placeholder="Search our shoes..."
-                value={searchQuery}
-                onChange={this.handleChange}
-              />
-            </Form>
+        <ShoesBackground>
+          <Container fluid>
             <div
-              style={styles.shoesIndex.headerWrap}
-              ref={el => (this.headerWrap = el)}
+              ref={el => (this.mainImage = el)}
+              style={styles.shoesIndex.mainBgLg}
             >
-              <Header
-                style={styles.shoesIndex.primaryHeader}
-                inverted
-                textAlign="left"
+              <Form onSubmit={this.handleSubmit} style={styles.searchBar}>
+                <Form.Input
+                  icon="search"
+                  iconPosition="left"
+                  placeholder="Search our shoes..."
+                  value={searchQuery}
+                  onChange={this.handleChange}
+                />
+              </Form>
+              <div
+                style={styles.shoesIndex.headerWrap}
+                ref={el => (this.headerWrap = el)}
               >
-                Welcome To Our Store
-              </Header>
-              <Header
-                style={styles.shoesIndex.secondaryHeader}
-                inverted
-                textAlign="left"
-                sub
-              >
-                Shoes for any occassion. Sneakerhead store allows anyone to sell
-                new shoes. Anyone from a retailer to individuals share their
-                shoes with the world.
-              </Header>
+                <Header
+                  style={styles.shoesIndex.primaryHeader}
+                  inverted
+                  textAlign="left"
+                >
+                  Welcome To Our Store
+                </Header>
+                <Header
+                  style={styles.shoesIndex.secondaryHeader}
+                  inverted
+                  textAlign="left"
+                  sub
+                >
+                  Shoes for any occassion. Sneakerhead store allows anyone to
+                  sell new shoes. Anyone from a retailer to individuals share
+                  their shoes with the world.
+                </Header>
+              </div>
             </div>
-          </div>
 
-          {/* Figure Out how to get uploaded shoe to display on index after being created */}
-        </Container>
-
-        <Header as="h2" attached="top" block>
-          <Icon name="chevron down" />
-          Currently Listed Shoes
-        </Header>
-        <div style={style.flex}>
+            {/* Figure Out how to get uploaded shoe to display on index after being created */}
+          </Container>
           <Grid style={style.gridContainer} columns="4">
             <ShoeCells />
           </Grid>
-        </div>
+        </ShoesBackground>
       </ProfileMenu>
     );
   }
@@ -158,7 +151,8 @@ let style = {
   },
   gridContainer: {
     margin: "auto",
-    width: "90%"
+    width: "90%",
+    height: "100vh"
   }
 };
 

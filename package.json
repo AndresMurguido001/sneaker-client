@@ -9,7 +9,6 @@
     "formik": "^1.0.3",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
-    "gsap": "^2.0.2",
     "jimp": "^0.3.11",
     "jwt-decode": "^2.2.0",
     "moment": "^2.22.2",

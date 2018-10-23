@@ -1,40 +1,16 @@
 import React from "react";
 import { HomeNav } from "../Components/Navbar";
-import {
-  Container,
-  Header,
-  Button,
-  ButtonGroup,
-  ButtonOr
-} from "semantic-ui-react";
+import { Container, Button, ButtonGroup, ButtonOr } from "semantic-ui-react";
 import Login from "../Components/Login";
 import Register from "../Components/Register";
-import styled from "styled-components";
-import bg from "../images/mainOneBg.jpg";
+import {
+  Background,
+  PrimaryHeader,
+  SecondaryHeader,
+  Wrap
+} from "../styles/Home";
 import MidSection from "../Components/HomeMidSection";
 
-let Background = styled.div`
-  height: 100vh;
-  background: linear-gradient(
-      45deg,
-      rgba(102, 54, 247, 0.5) 0%,
-      rgba(230, 40, 198, 0.3) 100%
-    ),
-    url(${bg});
-  background-position: center;
-  background-attachment: fixed;
-  background-size: cover;
-  padding-top: 300px;
-  clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%);
-`;
-
-let Wrap = styled.div`
-  background: linear-gradient(
-    to bottom,
-    rgba(102, 54, 247, 0.5),
-    rgba(230, 40, 198, 0.3)
-  );
-`;
 let MainContainer = props => (
   <Wrap>
     <Container textAlign="center" fluid>
@@ -54,7 +30,11 @@ class Home extends React.Component {
 
     return (
       <MainContainer>
-        <HomeNav />
+        <HomeNav
+          handleLoginClick={() =>
+            this.setState({ openLoginModal: !openLoginModal })
+          }
+        />
         <Background>
           <Login
             key={1}
@@ -71,12 +51,7 @@ class Home extends React.Component {
               this.setState({ openLoginModal: !this.state.openLoginModal });
             }}
           />
-          <Header
-            as="h1"
-            style={{ color: "#fff", fontSize: "5rem", wordWrap: "break-word" }}
-          >
-            Sneaker HeadShop
-          </Header>
+          <PrimaryHeader>Sneaker HeadShop</PrimaryHeader>
           <ButtonGroup style={{ width: "50%" }}>
             <Button
               primary
@@ -100,7 +75,9 @@ class Home extends React.Component {
               Register
             </Button>
           </ButtonGroup>
+          <SecondaryHeader>Selling shoes made easy</SecondaryHeader>
         </Background>
+
         <MidSection />
       </MainContainer>
     );

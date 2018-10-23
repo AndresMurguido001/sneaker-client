@@ -5,10 +5,10 @@ import gql from "graphql-tag";
 import styled, { css } from "styled-components";
 
 const InputElement = styled.div`
-  position: fixed;
-  bottom: 40px;
+  position: absolute;
+  bottom: 10px;
   width: 18rem;
-  right: 40px;
+  right: 15px;
   z-index: 4;
   opacity: 0;
   transition: opacity 200ms ease-in;
@@ -17,6 +17,8 @@ const InputElement = styled.div`
     props.channelId &&
     css`
       opacity: 1;
+      transition: opacity 200ms ease-in;
+      transition-delay: 300ms;
     `};
 `;
 
@@ -35,6 +37,9 @@ class SendMessage extends React.Component {
     await this.props.mutate({
       variables: { channelId: this.props.channelId, text: message }
     });
+    this.setState({
+      message: ""
+    });
   };
 
   render() {
@@ -45,6 +50,7 @@ class SendMessage extends React.Component {
       >
         <Form onSubmit={this.handleSubmit}>
           <Form.Input
+            value={this.state.message}
             onChange={e => this.setState({ message: e.target.value })}
           />
         </Form>

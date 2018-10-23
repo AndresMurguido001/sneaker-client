@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import midSectionBg from "../images/midSectionBg.jpg";
-import { Icon } from "semantic-ui-react";
+import { Icon, Header } from "semantic-ui-react";
 
 let MidWrapper = styled.div`
   display: flex;
@@ -35,6 +35,7 @@ export default () => (
   <MidWrapper>
     <MidColumns>
       <Icon name="upload" size="huge" circular inverted />
+      <Header style={{ color: "#fff" }} as="h3" content="Upload your shoes" />
       <p>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis,
         ab quibusdam! Veritatis tempora ullam distinctio! Nam laborum
@@ -45,6 +46,7 @@ export default () => (
     </MidColumns>
     <MidColumns>
       <Icon name="desktop" size="huge" circular inverted />
+      <Header style={{ color: "#fff" }} as="h3" content="Show the world" />
       <p>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis,
         ab quibusdam! Veritatis tempora ullam distinctio! Nam laborum
@@ -55,6 +57,7 @@ export default () => (
     </MidColumns>
     <MidColumns>
       <Icon name="stripe card" size="huge" circular inverted />
+      <Header style={{ color: "#fff" }} as="h3" content="Collect your cash" />
       <p>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis,
         ab quibusdam! Veritatis tempora ullam distinctio! Nam laborum

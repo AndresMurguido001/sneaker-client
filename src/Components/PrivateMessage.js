@@ -4,14 +4,16 @@ import moment from "moment";
 
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const PrivateListItem = styled.div`
   width: 100%;
   height: ${props =>
-    props.currentlySelected === props.convoId ? "auto" : "60px"};
+    props.currentlySelected === props.convoId ? "auto" : "87px"};
   overflow-y: hidden;
   padding-bottom: 50px;
+  padding-top: 20px;
+  ${props => !props.currentlySelected && css``};
 `;
 
 const newMessageSubscription = gql`
@@ -33,16 +35,12 @@ class PrivateMessage extends React.Component {
     selected: false
   };
   componentDidMount() {
-    console.log("subscribed");
-    this.unsubscribe = this.subscribe(this.props.conversationId);
+    this.subscribe(this.props.conversationId);
   }
   componentWillUnmount() {
-    console.log("unsubscribed");
-
-    this.unsubscribe();
+    this.subscribe(this.props.conversationId);
   }
   subscribe = channelId => {
-    console.log("set up subscribe func");
     this.props.data.subscribeToMore({
       document: newMessageSubscription,
       variables: {
@@ -72,6 +70,7 @@ class PrivateMessage extends React.Component {
     if (loading) {
       return <h2>Loading messages...</h2>;
     } else {
+      console.log(getChannelMessages);
       return (
         <div onClick={this.props.handleCellClicked}>
           <PrivateListItem
@@ -81,7 +80,7 @@ class PrivateMessage extends React.Component {
           >
             <Container fluid>
               <Comment.Group size="small">
-                {getChannelMessages.map(msg => {
+                {[...getChannelMessages].reverse().map(msg => {
                   let style = {
                     textAlign: msg.author.id === currentUser ? "left" : "right",
                     borderRadius: "30px",
