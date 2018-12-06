@@ -9,10 +9,10 @@ export const LoginSignup = ({
     openRegisterModal, 
     handleLoginClick, 
     handleRegisterClick,
-    handleRegisterSuccess
-}) => (
-
-
+    handleRegisterSuccess,
+    handleLoginSuccess,
+    userId
+}) => !userId && (
     <React.Fragment>
     <LoginSignupMenu borderless inverted floated="right">
     <Menu.Item>
@@ -32,6 +32,7 @@ export const LoginSignup = ({
             key={1}
             open={openLoginModal}
             onClose={() => handleLoginClick()}
+            onSuccess={(id) => handleLoginSuccess(id)}
           />
           
           <Register

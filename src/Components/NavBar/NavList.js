@@ -27,7 +27,7 @@ const NavList = ({ isOpen, userId }) => {
                 </li>
         )
     }
-    console.log(userId)
+  
     return (
         <Navwrap>
               <ul className={isOpen ? 'active' : 'disabled'}>

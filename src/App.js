@@ -134,22 +134,11 @@ let client = new ApolloClient({
 export const { Provider, Consumer } = React.createContext();
 
 class App extends Component {
-  state = {
-    userId: 0
-  }
-  componentDidMount(){
-    let { ok, userId } = isAuthenticated();
-    if (ok) {
-      this.setState({
-        userId: userId
-      })
-    }
-  }
+ 
   render() {
-    let { userId } = this.state
-    console.log("APP COMP: ", userId)
+    let { ok, userId } = isAuthenticated()
     return (
-      <Provider value={userId}>
+      <Provider value={ok ? userId : 0}>
         <ApolloProvider client={client}>
         <Theme>
           <Router>

@@ -28,6 +28,7 @@ class Login extends React.Component {
       let {
         user: { id }
       } = jwt_decode(token);
+      this.props.onSuccess(id)
       this.props.history.push(`/profile/${id}`);
     } else {
       let err = {};
