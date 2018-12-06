@@ -1,24 +1,14 @@
 import React from "react";
 import { Image, Card, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import gql from "graphql-tag";
+import { LikeShoeMutation } from "../ApolloService/ApolloRequests"
 import { graphql } from "react-apollo";
-import { AllShoesQuery } from "../Routes/Shoes";
+import { AllShoesQuery } from "../ApolloService/ApolloRequests";
 import { Message } from "semantic-ui-react";
 import EvenImage from "../Components/EvenImage";
 import ReactStars from "react-stars";
 
-let LikeShoeMutation = gql`
-  mutation($shoeId: Int!, $userId: Int!) {
-    likeShoe(userId: $userId, shoeId: $shoeId) {
-      ok
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
+
 class ShoeCell extends React.Component {
   constructor(props) {
     super(props);

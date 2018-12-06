@@ -1,29 +1,9 @@
 import React from "react";
 import { Modal, Form, Button, Message } from "semantic-ui-react";
 import { graphql } from "react-apollo";
-import gql from "graphql-tag";
+import { LoginSignupModal } from "../styles/Home/Nav";
+import { registerMuration } from '../ApolloService/ApolloRequests'
 
-const registerMuration = gql`
-  mutation(
-    $email: String!
-    $password: String!
-    $firstname: String!
-    $lastname: String!
-  ) {
-    registerUser(
-      email: $email
-      password: $password
-      firstname: $firstname
-      lastname: $lastname
-    ) {
-      ok
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
 
 class Register extends React.Component {
   state = {
@@ -62,7 +42,7 @@ class Register extends React.Component {
       Object.values(errors).map(msg => errList.push(msg));
     }
     return (
-      <Modal open={open} onClose={onClose} style={{ padding: "20px" }}>
+      <LoginSignupModal open={open} onClose={onClose}>
         <Form onSubmit={this.handleSubmit} error>
           <Modal.Header as="h2">Register For Your Account</Modal.Header>
           <Modal.Content>
@@ -103,12 +83,12 @@ class Register extends React.Component {
             )}
           </Modal.Content>
           <Modal.Actions>
-            <Button style={{ marginTop: "10px" }} primary type="submit">
+            <Button fluid type="submit">
               Register
             </Button>
           </Modal.Actions>
         </Form>
-      </Modal>
+      </LoginSignupModal>
     );
   }
 }

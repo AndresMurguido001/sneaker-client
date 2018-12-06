@@ -1,8 +1,8 @@
 import React from "react";
-import { Container, Header, Icon, Button } from "semantic-ui-react";
+import { Container, Icon, Button } from "semantic-ui-react";
 import styled, { css } from "styled-components";
 import PrivateMessage from "./PrivateMessage";
-import gql from "graphql-tag";
+import { createChannelMutation } from "../ApolloService/ApolloRequests";
 import { graphql } from "react-apollo";
 import SendMessage from "./SendMessage";
 const MessageWrapper = styled.div`
@@ -75,13 +75,7 @@ const MessagesButton = styled.button`
     `};
 `;
 
-const createChannelMutation = gql`
-  mutation($senderId: Int!, $receiverId: Int!) {
-    createChannel(senderId: $senderId, receiverId: $receiverId) {
-      ok
-    }
-  }
-`;
+
 
 class MessageContainer extends React.Component {
   state = {

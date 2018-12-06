@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./index.css";
 import { ApolloClient } from "apollo-client";
 import { ApolloProvider } from "react-apollo";
 import { ApolloLink, split } from "apollo-link";
@@ -20,6 +19,8 @@ import Home from "./Routes/Home";
 import MyProfile from "./Routes/Profile";
 import Shoes from "./Routes/Shoes";
 import DisplayShoe from "./Routes/DisplayShoe";
+import Theme from './styles/Theme'
+import { Navbar } from "./Containers/NavBar/Navbar";
 
 const httpLink = new HttpLink({ uri: "http://localhost:8080/graphql" });
 
@@ -133,24 +134,41 @@ let client = new ApolloClient({
 export const { Provider, Consumer } = React.createContext();
 
 class App extends Component {
-  render() {
+  state = {
+    userId: 0
+  }
+  componentDidMount(){
     let { ok, userId } = isAuthenticated();
+    if (ok) {
+      this.setState({
+        userId: userId
+      })
+    }
+  }
+  render() {
+    let { userId } = this.state
+    console.log("APP COMP: ", userId)
     return (
-      <Provider value={ok ? userId : 0}>
+      <Provider value={userId}>
         <ApolloProvider client={client}>
+        <Theme>
           <Router>
-            <Switch>
+            <div>
+              {/* <Switch> */}
+              <Route path="/" render={(props) => (<Navbar userId={userId} />)} />
               <Route exact path="/" component={Home} />
+              <PrivateRoute path="/profile/:id" component={MyProfile} />
               <Route
                 exact
                 path="/shoes/search/:searchQuery?"
                 component={Shoes}
               />
               <Route exact path="/shoes" component={Shoes} />
-              <PrivateRoute exact path="/:id" component={MyProfile} />
               <PrivateRoute exact path="/shoes/:id" component={DisplayShoe} />
-            </Switch>
+            {/* </Switch> */}
+            </div>
           </Router>
+        </Theme>
         </ApolloProvider>
       </Provider>
     );

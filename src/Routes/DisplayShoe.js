@@ -1,41 +1,8 @@
 import React from "react";
-import ProfileMenu from "../Components/ProfileMenu";
 import { Container, Dimmer, Loader } from "semantic-ui-react";
 import { graphql } from "react-apollo";
-import gql from "graphql-tag";
+import { getShoeQuery } from "../ApolloService/ApolloRequests";
 import ShoeDisplay from "../Components/ShoeDisplay";
-
-let getShoeQuery = gql`
-  query($shoeId: Int!) {
-    getShoe(shoeId: $shoeId) {
-      ok
-      shoe {
-        id
-        brand
-        model
-        averageRating
-        owner {
-          id
-          profilePic
-          firstname
-          lastname
-        }
-        description
-        numberOfLikes
-        photos
-        size
-        reviews {
-          id
-          message
-          user {
-            email
-            id
-          }
-        }
-      }
-    }
-  }
-`;
 
 let DisplayShoe = ({ data: { loading, getShoe } }) => {
   if (loading) {
@@ -47,13 +14,13 @@ let DisplayShoe = ({ data: { loading, getShoe } }) => {
   }
 
   return (
-    <ProfileMenu isInverted>
+ 
       <div style={styles.flexWrap}>
         <Container>
           <ShoeDisplay shoe={getShoe.shoe} />
         </Container>
       </div>
-    </ProfileMenu>
+ 
   );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Form } from "semantic-ui-react";
 import { graphql } from "react-apollo";
-import gql from "graphql-tag";
+import { createMessageMutation } from "../ApolloService/ApolloRequests";
 import styled, { css } from "styled-components";
 
 const InputElement = styled.div`
@@ -22,11 +22,7 @@ const InputElement = styled.div`
     `};
 `;
 
-const createMessageMutation = gql`
-  mutation($channelId: Int!, $text: String!) {
-    createMessage(channelId: $channelId, text: $text)
-  }
-`;
+  
 
 class SendMessage extends React.Component {
   state = {

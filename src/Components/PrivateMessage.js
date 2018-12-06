@@ -3,7 +3,7 @@ import { Comment, Container } from "semantic-ui-react";
 import moment from "moment";
 
 import { graphql } from "react-apollo";
-import gql from "graphql-tag";
+import { newMessageSubscription, messagesQuery } from "../ApolloService/ApolloRequests";
 import styled, { css } from "styled-components";
 
 const PrivateListItem = styled.div`
@@ -16,19 +16,7 @@ const PrivateListItem = styled.div`
   ${props => !props.currentlySelected && css``};
 `;
 
-const newMessageSubscription = gql`
-  subscription($channelId: Int!) {
-    newMessage(channelId: $channelId) {
-      id
-      text
-      author {
-        id
-        email
-      }
-      created_at
-    }
-  }
-`;
+
 
 class PrivateMessage extends React.Component {
   state = {
@@ -114,19 +102,7 @@ class PrivateMessage extends React.Component {
   }
 }
 
-const messagesQuery = gql`
-  query($channelId: Int!) {
-    getChannelMessages(channelId: $channelId) {
-      id
-      text
-      author {
-        id
-        email
-      }
-      created_at
-    }
-  }
-`;
+
 
 export default graphql(messagesQuery, {
   options: props => ({

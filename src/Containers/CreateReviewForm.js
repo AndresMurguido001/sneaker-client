@@ -10,33 +10,10 @@ import {
 } from "semantic-ui-react";
 import { graphql, compose } from "react-apollo";
 import ReactStars from "react-stars";
-import gql from "graphql-tag";
+import { CreateReviewMutation } from "../ApolloService/ApolloRequests";
 import { withRouter } from "react-router-dom";
 
-const CreateReviewMutation = gql`
-  mutation(
-    $message: String!
-    $userId: Int!
-    $shoeId: Int!
-    $starRating: Float
-  ) {
-    createReview(
-      message: $message
-      userId: $userId
-      shoeId: $shoeId
-      starRating: $starRating
-    ) {
-      ok
-      errors {
-        path
-        message
-      }
-      review {
-        message
-      }
-    }
-  }
-`;
+
 
 class CreateReviewForm extends React.Component {
   state = {

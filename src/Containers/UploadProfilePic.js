@@ -2,7 +2,7 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import axios from "axios";
 import { graphql, compose } from "react-apollo";
-import gql from "graphql-tag";
+import { s3SignMutation, uploadProfilePicMutation } from '../ApolloService/ApolloRequests'
 import moment from "moment";
 import { Button, Form, Header } from "semantic-ui-react";
 import styled from "styled-components";
@@ -134,26 +134,7 @@ class UploadProfilePic extends React.Component {
   }
 }
 
-const s3SignMutation = gql`
-  mutation($filename: String!, $filetype: String!) {
-    signS3(filename: $filename, filetype: $filetype) {
-      url
-      signedRequest
-    }
-  }
-`;
-const uploadProfilePicMutation = gql`
-  mutation($profilePic: String!) {
-    uploadProfilePic(profilePic: $profilePic) {
-      ok
-      errors {
-        path
-        message
-      }
-      profilePic
-    }
-  }
-`;
+
 
 export default compose(
   graphql(s3SignMutation, { name: "s3Sign" }),

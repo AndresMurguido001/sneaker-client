@@ -1,23 +1,11 @@
 import React from "react";
 import { Modal, Form, Button, Message } from "semantic-ui-react";
 import { graphql, compose } from "react-apollo";
-import gql from "graphql-tag";
 import { withRouter } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import { LoginSignupModal } from "../styles/Home/Nav";
+import { loginMutation } from '../ApolloService/ApolloRequests'
 
-const loginMutation = gql`
-  mutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      ok
-      token
-      refreshToken
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
 
 class Login extends React.Component {
   state = {
@@ -40,7 +28,7 @@ class Login extends React.Component {
       let {
         user: { id }
       } = jwt_decode(token);
-      this.props.history.push(`/${id}`);
+      this.props.history.push(`/profile/${id}`);
     } else {
       let err = {};
       errors.forEach(({ path, message }) => {
@@ -58,7 +46,7 @@ class Login extends React.Component {
     }
 
     return (
-      <Modal open={open} onClose={onClose} style={{ padding: "20px" }}>
+      <LoginSignupModal open={open} onClose={onClose}>
         <Form onSubmit={this.handleSubmit} error>
           <Modal.Header as="h2">Login</Modal.Header>
           <Modal.Content>
@@ -86,12 +74,12 @@ class Login extends React.Component {
           </Modal.Content>
 
           <Modal.Actions>
-            <Button style={{ marginTop: "10px" }} primary type="submit">
+            <Button primary fluid type="submit">
               Login
             </Button>
           </Modal.Actions>
         </Form>
-      </Modal>
+      </LoginSignupModal>
     );
   }
 }

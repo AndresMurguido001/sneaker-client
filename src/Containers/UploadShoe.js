@@ -2,7 +2,7 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import axios from "axios";
 import { graphql, compose } from "react-apollo";
-import gql from "graphql-tag";
+import { s3SignMutation, createShoeMutation } from "../ApolloService/ApolloRequests";
 import moment from "moment";
 import { Button, Form, Header, Message, Image } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
@@ -215,49 +215,6 @@ class Upload extends React.Component {
     );
   }
 }
-
-const s3SignMutation = gql`
-  mutation($filename: String!, $filetype: String!) {
-    signS3(filename: $filename, filetype: $filetype) {
-      url
-      signedRequest
-    }
-  }
-`;
-const createShoeMutation = gql`
-  mutation(
-    $brand: String!
-    $model: String!
-    $size: Float!
-    $userId: Int!
-    $description: String!
-    $photos: [String!]
-  ) {
-    createShoe(
-      brand: $brand
-      model: $model
-      size: $size
-      userId: $userId
-      description: $description
-      photos: $photos
-    ) {
-      ok
-      errors {
-        path
-        message
-      }
-      shoe {
-        id
-        brand
-        owner {
-          firstname
-        }
-        model
-        photos
-      }
-    }
-  }
-`;
 
 export default compose(
   graphql(s3SignMutation, { name: "s3Sign" }),
