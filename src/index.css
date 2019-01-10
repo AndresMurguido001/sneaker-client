@@ -1,5 +1,5 @@
 html {
-  font-size: 62.5% !important;
+/*  font-size: 62.5% !important;*/
 }
 
 *, *::before, *::after {
@@ -9,4 +9,6 @@ html {
 }
 
 
-
+body {
+	background-color: #ccc;
+}

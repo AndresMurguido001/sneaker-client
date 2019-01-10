@@ -10,10 +10,11 @@ import {
 } from "semantic-ui-react";
 import { graphql, compose } from "react-apollo";
 import ReactStars from "react-stars";
-import { CreateReviewMutation } from "../ApolloService/ApolloRequests";
+import {
+  CreateReviewMutation,
+  GetShoeReviews
+} from "../ApolloService/ApolloRequests";
 import { withRouter } from "react-router-dom";
-
-
 
 class CreateReviewForm extends React.Component {
   state = {
@@ -32,20 +33,35 @@ class CreateReviewForm extends React.Component {
     });
   handleSubmit = async () => {
     const { shoeId, userId, mutate } = this.props;
-    let reviewResponse = await mutate({
+    // Create and update review / getReview query;
+    await mutate({
       variables: {
         userId,
         shoeId,
         message: this.state.message,
         starRating: this.state.starRating
+      },
+      update: (proxy, { data: { createReview } }) => {
+        const { ok, errors, review } = createReview;
+        const data = proxy.readQuery({
+          query: GetShoeReviews,
+          variables: { shoeId }
+        });
+
+        if (ok) {
+          this.props.onClose();
+          data.getReviews.push(review);
+          proxy.writeQuery({
+            query: GetShoeReviews,
+            variables: { shoeId },
+            data
+          });
+        }
+        if (errors) {
+          console.log("ERROR: ", errors);
+        }
       }
     });
-    console.log(reviewResponse);
-    let { ok, review } = reviewResponse.data.createReview;
-    if (ok) {
-      this.props.onClose();
-    }
-    console.log(review);
   };
   render() {
     const { photo, open, onClose } = this.props;

@@ -1,11 +1,9 @@
 import React from "react";
 import { Modal, Form, Button, Message } from "semantic-ui-react";
-import { graphql, compose } from "react-apollo";
-import { withRouter } from "react-router-dom";
+import { graphql } from "react-apollo";
 import jwt_decode from "jwt-decode";
 import { LoginSignupModal } from "../styles/Home/Nav";
-import { loginMutation } from '../ApolloService/ApolloRequests'
-
+import { loginMutation } from "../ApolloService/ApolloRequests";
 
 class Login extends React.Component {
   state = {
@@ -25,11 +23,10 @@ class Login extends React.Component {
       this.props.onClose();
       localStorage.setItem("token", token);
       localStorage.setItem("refreshToken", refreshToken);
-      let {
+      const {
         user: { id }
       } = jwt_decode(token);
-      this.props.onSuccess(id)
-      this.props.history.push(`/profile/${id}`);
+      window.location.href = `/profile/${id}`;
     } else {
       let err = {};
       errors.forEach(({ path, message }) => {
@@ -85,7 +82,4 @@ class Login extends React.Component {
   }
 }
 
-export default compose(
-  graphql(loginMutation),
-  withRouter
-)(Login);
+export default graphql(loginMutation)(Login);

@@ -4,7 +4,7 @@ import { Card, Image, Icon, Container, Header } from "semantic-ui-react";
 class ListOfReviews extends React.Component {
   render() {
     const { reviews } = this.props;
-    if (reviews.length < 1) {
+    if (!reviews) {
       return (
         <Container fluid>
           <Header

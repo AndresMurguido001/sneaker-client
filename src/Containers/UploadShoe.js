@@ -2,7 +2,10 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import axios from "axios";
 import { graphql, compose } from "react-apollo";
-import { s3SignMutation, createShoeMutation } from "../ApolloService/ApolloRequests";
+import {
+  s3SignMutation,
+  createShoeMutation
+} from "../ApolloService/ApolloRequests";
 import moment from "moment";
 import { Button, Form, Header, Message, Image } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
@@ -15,6 +18,7 @@ class Upload extends React.Component {
     model: "",
     brand: "",
     size: 0,
+    price: 0,
     description: "",
     loading: false,
     errors: {},
@@ -26,6 +30,7 @@ class Upload extends React.Component {
   };
 
   onChange = (e, data) => {
+    console.log(data.name, data.value);
     this.setState({
       [data.name]: data.value
     });
@@ -92,6 +97,7 @@ class Upload extends React.Component {
         model: this.state.model,
         description: this.state.description,
         size: parseFloat(this.state.size),
+        price: parseFloat(this.state.price),
         photos: resultUrls,
         userId: this.props.userId
       }
@@ -177,6 +183,15 @@ class Upload extends React.Component {
               name="size"
               placeholder="Size"
               maxLength="4"
+            />
+            <Form.Input
+              label="Price"
+              value={this.state.price}
+              onChange={this.onChange}
+              name="price"
+              placeholder="Price"
+              icon="dollar sign"
+              iconPosition="left"
             />
           </Form.Group>
 

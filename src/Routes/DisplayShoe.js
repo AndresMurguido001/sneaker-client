@@ -3,6 +3,7 @@ import { Container, Dimmer, Loader } from "semantic-ui-react";
 import { graphql } from "react-apollo";
 import { getShoeQuery } from "../ApolloService/ApolloRequests";
 import ShoeDisplay from "../Components/ShoeDisplay";
+import displayShoeBg from "../images/displayShoe.jpg";
 
 let DisplayShoe = ({ data: { loading, getShoe } }) => {
   if (loading) {
@@ -14,13 +15,11 @@ let DisplayShoe = ({ data: { loading, getShoe } }) => {
   }
 
   return (
- 
-      <div style={styles.flexWrap}>
-        <Container>
-          <ShoeDisplay shoe={getShoe.shoe} />
-        </Container>
-      </div>
- 
+    <div style={styles.flexWrap}>
+      <Container>
+        <ShoeDisplay shoe={getShoe.shoe} />
+      </Container>
+    </div>
   );
 };
 
@@ -39,6 +38,10 @@ let styles = {
     display: "flex",
     justifyContent: "space-around",
     height: "100%",
-    width: "100%"
+    width: "100%",
+    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${displayShoeBg})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "repeat-y"
   }
 };

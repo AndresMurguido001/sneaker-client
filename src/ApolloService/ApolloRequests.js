@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
 // Profile Query
 export const meQuery = gql`
   query($id: String!) {
@@ -134,7 +134,12 @@ export const CreateReviewMutation = gql`
         message
       }
       review {
+        id
         message
+        user {
+          email
+          id
+        }
       }
     }
   }
@@ -168,6 +173,7 @@ export const createShoeMutation = gql`
     $model: String!
     $size: Float!
     $userId: Int!
+    $price: Float!
     $description: String!
     $photos: [String!]
   ) {
@@ -176,6 +182,7 @@ export const createShoeMutation = gql`
       model: $model
       size: $size
       userId: $userId
+      price: $price
       description: $description
       photos: $photos
     ) {
@@ -216,14 +223,6 @@ export const getShoeQuery = gql`
         numberOfLikes
         photos
         size
-        reviews {
-          id
-          message
-          user {
-            email
-            id
-          }
-        }
       }
     }
   }
@@ -244,6 +243,19 @@ export const AllShoesQuery = gql`
       description
       photos
       averageRating
+    }
+  }
+`;
+// Get each specific shoes reviews;q
+export const GetShoeReviews = gql`
+  query($shoeId: Int!) {
+    getReviews(shoeId: $shoeId) {
+      id
+      message
+      user {
+        email
+        id
+      }
     }
   }
 `;

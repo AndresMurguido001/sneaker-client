@@ -1,42 +1,37 @@
-import React from 'react';
-import { Navwrap } from '../../styles/Home/Nav';
-import { Link } from 'react-router-dom';
-import { Icon } from 'semantic-ui-react';
+import React from "react";
+import { Icon, Menu } from "semantic-ui-react";
 
+const linkStyle = {
+  color: "#fff"
+};
 
-const NavList = ({ isOpen, userId }) => {
-
-    let NavLink = ({ path, icon, user, content }) => {
-        if (user) {
-                return (
-                    <li>
-                        <Link to={`${path}/${user}`}>
-                            <Icon name={`${icon}`} />
-                            <span>{content}</span>
-                        </Link>
-                    </li>
-                )
-            }
- 
-        return (
-                <li>
-                    <Link to={path}>
-                        <Icon name={`${icon}`} />
-                        <span>{content}</span>
-                    </Link>
-                </li>
-        )
-    }
-  
-    return (
-        <Navwrap>
-              <ul className={isOpen ? 'active' : 'disabled'}>
-                  <NavLink path={"/"} icon="home" content="Home" />
-                  <NavLink path={"#"} icon="info" content="About" />
-                  <NavLink path={"/shoes"} icon="shopping bag" content="Shop" />
-                  { userId ? (<NavLink path={"/profile"} user={userId} icon="user circle" content="Profile" />) : false }
-              </ul> 
-            </Navwrap>
-            )
-}
+let NavLink = ({ path, icon, user, content }) =>
+  user ? (
+    <Menu.Item style={linkStyle} href={`${path}/${user}`}>
+      <Icon name={`${icon}`} />
+      <span>{content}</span>
+    </Menu.Item>
+  ) : (
+    <Menu.Item style={linkStyle} href={path}>
+      <Icon name={`${icon}`} />
+      <span>{content}</span>
+    </Menu.Item>
+  );
+const NavList = ({ userId }) => (
+  <React.Fragment>
+    <NavLink path={"/"} icon="home" content="Home" />
+    <NavLink path={"#"} icon="info" content="About" />
+    <NavLink path={"/shoes"} icon="shopping bag" content="Shop" />
+    {userId ? (
+      <NavLink
+        path={"/profile"}
+        user={userId}
+        icon="user circle"
+        content="Profile"
+      />
+    ) : (
+      false
+    )}
+  </React.Fragment>
+);
 export default NavList;

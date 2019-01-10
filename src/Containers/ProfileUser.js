@@ -1,6 +1,6 @@
 import React from "react";
+import noUserPic from "../images/user.png";
 import { Card, Icon, Image, Grid, Container, Feed } from "semantic-ui-react";
-import avatar from "../images/avatar.ico";
 import bg from "../images/ProfileBg.jpg";
 import UsersShoes from "../Components/UsersShoes";
 import UploadShoe from "../Containers/UploadShoe";
@@ -9,20 +9,20 @@ import UploadProfilePic from "../Containers/UploadProfilePic";
 class ProfileUser extends React.Component {
   render() {
     let {
-      data: { id, firstname, lastname, email, shoes, profilePic },
-      currentUser
+      data: { id, firstname, lastname, email, shoes, profilePic }
     } = this.props;
 
     let hasShoes = shoes.length > 0 ? true : false;
 
     let mostRecent = shoes[shoes.length - 1];
-    let mostRecentPhoto = hasShoes ? mostRecent.photos[0] : null;
+    let mostRecentPhoto =
+      hasShoes && mostRecent.photos ? mostRecent.photos[0] : "";
     let likesArr = hasShoes ? shoes.map(shoe => shoe.numberOfLikes) : null;
     let totalLikes = hasShoes ? likesArr.reduce((acc, cv) => acc + cv) : 0;
 
     return (
       <div>
-        <Grid columns={3} padded="horizontally">
+        <Grid style={{ paddingTop: "5rem" }} columns={3} padded="horizontally">
           <Grid.Column>
             {hasShoes ? (
               <Card>
@@ -65,7 +65,11 @@ class ProfileUser extends React.Component {
           </Grid.Column>
           <Grid.Column>
             <Card>
-              <Image size="medium" src={profilePic ? profilePic : avatar} />
+              {profilePic ? (
+                <Image src={profilePic} />
+              ) : (
+                <Image src={noUserPic} />
+              )}
               <Card.Content>
                 <Card.Header>{`${firstname} ${lastname}`}</Card.Header>
                 <Card.Meta>
@@ -90,7 +94,7 @@ class ProfileUser extends React.Component {
               <Card.Content description="Description goes here" />
               <Card.Content extra>
                 <Icon inverted circular name="like" />
-                {totalLikes}
+                Total: {totalLikes}
               </Card.Content>
             </Card>
             <Card>
@@ -136,12 +140,10 @@ class ProfileUser extends React.Component {
           </Grid.Column>
         </Grid>
         <Container>
-          {currentUser === id ? (
-            <div>
-              <UploadProfilePic />
-              <UploadShoe userId={currentUser} />
-            </div>
-          ) : null}
+          <div>
+            <UploadProfilePic />
+            <UploadShoe userId={id} />
+          </div>
           <UsersShoes profilePic={profilePic} shoes={shoes} />
         </Container>
       </div>

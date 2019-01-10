@@ -26,7 +26,7 @@ class Home extends React.Component {
         
         </Section>
         <Section midSection={"https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2018%2F02%2Fnike-kobe-1-protro-behind-the-design-4.jpg?w=1600&cbr=1&q=90&fit=max"}>
-              <HeadingSecondary underlined mb={8}>
+              <HeadingSecondary underlined mb={6}>
                 New realeases
               </HeadingSecondary>
 

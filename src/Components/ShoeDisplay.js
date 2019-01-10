@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, Icon, Segment, Card, Header, Button } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Reviews from "./Reviews";
 import ReactStars from "react-stars";
 
@@ -18,9 +18,16 @@ export default class ShoeDisplay extends React.Component {
     const { reviewModalOpen } = this.state;
     return (
       <div style={style.container}>
-        <Header as="h1" floated="left">{`${shoe.brand} - ${
-          shoe.model
-        }`}</Header>
+        <Header
+          style={{
+            color: "#fff",
+            fontSize: "3rem",
+            letterSpacing: "0.6rem",
+            filter: "drop-shadow(6px 5px 5px rgb(0, 0, 0))"
+          }}
+          as="h1"
+          floated="left"
+        >{`${shoe.brand} - ${shoe.model}`}</Header>
         <Card raised style={{ alignSelf: "flex-start" }} fluid>
           <Segment>
             <Image rounded size="big" src={shoe.photos[0]} floated="left" />
@@ -52,22 +59,20 @@ export default class ShoeDisplay extends React.Component {
                 <Segment>
                   <p style={{ margin: "auto 0" }}>
                     {shoe.owner.firstname} {shoe.owner.lastname}
-                    <Link to={`/${shoe.owner.id}`}>
-                      {shoe.owner.profilePic ? (
-                        <Image
-                          src={shoe.owner.profilePic}
-                          centered
-                          circular
-                          size="small"
-                        />
-                      ) : (
-                        <Icon
-                          style={{ float: "right" }}
-                          size="big"
-                          name="user circle outline"
-                        />
-                      )}
-                    </Link>
+                    {shoe.owner.profilePic ? (
+                      <Image
+                        src={shoe.owner.profilePic}
+                        centered
+                        circular
+                        size="small"
+                      />
+                    ) : (
+                      <Icon
+                        style={{ float: "right" }}
+                        size="big"
+                        name="user circle outline"
+                      />
+                    )}
                   </p>
                   <span style={{ display: "inline" }}>
                     <ReactStars
@@ -75,7 +80,7 @@ export default class ShoeDisplay extends React.Component {
                       value={shoe.averageRating}
                       edit={false}
                     />
-                    {`(${shoe.reviews.length})`}
+                    {/* {`(${shoe.reviews.length})`} */}
                   </span>
                 </Segment>
                 <Button
@@ -93,12 +98,12 @@ export default class ShoeDisplay extends React.Component {
             </Card>
           </Segment>
         </Card>
+        {/* get reviews in review component using shoeId prop*/}
         <Reviews
           reviewModalOpen={reviewModalOpen}
           closeReviewModal={this.closeReviewModal}
           photo={shoe.photos[0]}
           shoeId={shoe.id}
-          reviews={shoe.reviews}
         />
       </div>
     );
@@ -109,7 +114,8 @@ let style = {
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    marginTop: "8rem"
   },
   smallImgs: {
     display: "flex",
