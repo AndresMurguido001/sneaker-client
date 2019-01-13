@@ -7,16 +7,14 @@ import { AuthConsumer } from "../Context/AuthContext";
 //getReview query
 import { GetShoeReviews } from "../ApolloService/ApolloRequests";
 import { graphql } from "react-apollo";
-
-// Use getReview query to take advantage of optimistic ui feature to update right after creating review.
+import { HeadingSecondary } from "../styles/Home/Home";
 
 const Reviews = ({
   photo,
   reviewModalOpen,
   closeReviewModal,
   shoeId,
-  loading,
-  data: { getReviews }
+  data: { loading, getReviews }
 }) => {
   return (
     <React.Fragment>
@@ -30,12 +28,11 @@ const Reviews = ({
               shoeId={shoeId}
               userId={userId}
             />
-            <Container>
-              <Header as="h2" block size="medium">
-                <Icon name="chevron down" />
-                Reviews
-              </Header>
-              <ListOfReviews shoeId={shoeId} reviews={getReviews} />
+		{/*
+			<HeadingSecondary underlined>Reviews</HeadingSecondary>
+		*/}
+            <Container style={{ margin: "5rem 0" }}>
+              <ListOfReviews shoeId={shoeId} loading={loading} reviews={getReviews} />
             </Container>
           </div>
         )}

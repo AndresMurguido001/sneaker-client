@@ -52,7 +52,7 @@ class Shoes extends React.Component {
 
     // let { searchQuery } = this.state;
     return (
-      <Section background={bg}>
+      <Section style={{ backgroundAttachment: "fixed" }} background={bg}>
         <Container>
           {/* TODO: Put searchbar into its own component */}
           {/* <Form onSubmit={this.handleSubmit} >

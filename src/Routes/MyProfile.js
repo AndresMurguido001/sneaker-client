@@ -22,13 +22,17 @@ class MyProfile extends React.Component {
     return (
       <div
         style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${nikeWall})`,
+          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url(${nikeWall})`,
           backgroundSize: "cover",
-          backgroundPosition: "center"
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          height: "100%",
+          backgroundRepeat: "repeat-y",
+          padding: "5rem 0"
         }}
       >
         <Container>
-          <ProfileUser data={getUser} />
+          <ProfileUser currentUser={getUser.id} data={getUser} />
         </Container>
       </div>
     );

@@ -30,7 +30,6 @@ class Upload extends React.Component {
   };
 
   onChange = (e, data) => {
-    console.log(data.name, data.value);
     this.setState({
       [data.name]: data.value
     });

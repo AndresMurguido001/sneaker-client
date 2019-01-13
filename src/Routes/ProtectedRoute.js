@@ -8,10 +8,8 @@ const ProtectedRoute = ({ component: Component, ...rest }) => (
       <Route
         render={props => {
           if (ok) {
-            console.log("USERID");
             return <Component {...props} />;
           } else {
-            console.log("NOT USER ID");
             return <Redirect to="/" />;
           }
         }}

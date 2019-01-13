@@ -1,15 +1,14 @@
 import React from "react";
 import { Grid, Header } from "semantic-ui-react";
 import ShoeCell from "./ShoeCell";
+import { HeadingSecondary } from "../styles/Home/Home";
 
 const UsersShoes = ({ profilePic, shoes }) => {
   if (shoes.length > 0) {
     return (
       <React.Fragment>
-        <Header as="h3" block>
-          Your Currently Listed Shoes
-        </Header>
-        <Grid columns={4}>
+        <HeadingSecondary underlined>Your Shoes</HeadingSecondary>
+        <Grid style={{ margin: "5rem auto" }} columns={4}>
           {shoes.map((shoe, index) => {
             return (
               <ShoeCell
@@ -26,7 +25,7 @@ const UsersShoes = ({ profilePic, shoes }) => {
   }
   return (
     <div>
-      <h1>You havent posted any shoes</h1>
+      <HeadingSecondary underlined>No shoes</HeadingSecondary>
     </div>
   );
 };

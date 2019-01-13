@@ -12,6 +12,7 @@ export const meQuery = gql`
         id
       }
       shoes {
+        id
         brand
         numberOfLikes
         description
@@ -255,6 +256,17 @@ export const GetShoeReviews = gql`
       user {
         email
         id
+      }
+    }
+  }
+`;
+export const DeleteShoeMutation = gql`
+  mutation($shoeId: Int!) {
+    deleteShoe(shoeId: $shoeId) {
+      ok
+      errors {
+        path
+        message
       }
     }
   }

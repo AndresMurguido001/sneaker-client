@@ -35,13 +35,14 @@ export default graphql(getShoeQuery, {
 
 let styles = {
   flexWrap: {
+    padding: "5rem 0",
     display: "flex",
     justifyContent: "space-around",
     height: "100%",
     width: "100%",
-    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${displayShoeBg})`,
+    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url(${displayShoeBg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
-    backgroundRepeat: "repeat-y"
+    backgroundAttachment: "fixed"
   }
 };

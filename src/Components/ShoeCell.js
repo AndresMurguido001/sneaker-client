@@ -1,25 +1,27 @@
 import React from "react";
 import { Image, Card, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { LikeShoeMutation } from "../ApolloService/ApolloRequests"
-import { graphql } from "react-apollo";
-import { AllShoesQuery } from "../ApolloService/ApolloRequests";
+import {
+  LikeShoeMutation,
+  DeleteShoeMutation,
+  meQuery,
+  AllShoesQuery
+} from "../ApolloService/ApolloRequests";
+import { graphql, compose } from "react-apollo";
 import { Message } from "semantic-ui-react";
 import EvenImage from "../Components/EvenImage";
 import ReactStars from "react-stars";
-
 
 class ShoeCell extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      likeError: "",
-      tooLarge: false
+      likeError: ""
     };
-    this.cardWrapper = React.createRef();
   }
 
   onLikeClick = async () => {
+    console.log("ON LIKE CLICK");
     await this.props.mutate({
       variables: {
         userId: this.props.currentUser,
@@ -42,11 +44,29 @@ class ShoeCell extends React.Component {
       }
     });
   };
-  getSize = () => {
-    if (this.cardWrapper.current.offsetHeight > 327) {
-      this.setState({ tooLarge: true });
-    }
-  };
+  // Figure out where to add delete shoe mutation
+  // onDeleteClick = async () => {
+  //   const {
+  //     shoe: { id }
+  //   } = this.props;
+  //   const { ok, errors } = await this.props.mutate({
+  //     variables: {
+  //       shoeId: id
+  //     },
+  //     update: (proxy, { data: { deleteShoe } }) => {
+  //       const { ok, errors } = deleteShoe;
+  //       const data = proxy.readQuery({
+  //         query: meQuery,
+  //         variables: { userId: this.props.currentUser }
+  //       });
+  //     }
+  //   });
+  //   if (ok) {
+  //     console.log("Shoes Deleted");
+  //   } else {
+  //     console.log("ERROR: ", errors);
+  //   }
+  // };
 
   render() {
     let {
@@ -65,14 +85,10 @@ class ShoeCell extends React.Component {
       usersProfile
     } = this.props;
     let primaryPhoto = photos ? photos[0] : null;
-    let { tooLarge } = this.state;
+
     return (
-      <div
-        style={style.cardContainer}
-        ref={this.cardWrapper}
-        onLoad={this.getSize}
-      >
-        <Card style={tooLarge ? style.tooLarge : null} raised>
+      <div style={style.cardContainer}>
+        <Card style={{ position: "relative" }} raised>
           {this.state.likeError && (
             <Message error content={this.state.likeError} />
           )}
@@ -112,7 +128,19 @@ class ShoeCell extends React.Component {
           </Card.Content>
           <Card.Content extra>
             {usersProfile ? (
-              <Icon name="like" color="red" />
+              <React.Fragment>
+                <Icon
+                  style={{
+                    position: "absolute",
+                    top: "1rem",
+                    right: "1rem"
+                  }}
+                  name="delete"
+                  color="red"
+                  circular
+                />
+                <Icon name="like" color="red" />
+              </React.Fragment>
             ) : (
               <a>
                 <Icon name="like" onClick={this.onLikeClick} />
@@ -127,9 +155,6 @@ class ShoeCell extends React.Component {
   }
 }
 let style = {
-  tooLarge: {
-    height: "347px"
-  },
   cardExtra: {
     padding: "10px"
   },
@@ -137,4 +162,4 @@ let style = {
     margin: "1rem 0"
   }
 };
-export default graphql(LikeShoeMutation)(ShoeCell);
+export default compose(graphql(LikeShoeMutation))(ShoeCell);

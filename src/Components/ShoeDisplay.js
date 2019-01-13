@@ -117,18 +117,6 @@ let style = {
     justifyContent: "space-around",
     marginTop: "8rem"
   },
-  smallImgs: {
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    float: "left",
-    paddingRight: "10px"
-  },
-  description: {
-    alignSelf: "flex-start",
-    float: "right",
-    padding: "10px"
-  },
   button: {
     textAlign: "center",
     margin: "auto",
