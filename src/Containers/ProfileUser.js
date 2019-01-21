@@ -144,7 +144,7 @@ class ProfileUser extends React.Component {
             <UploadProfilePic />
             <UploadShoe userId={id} />
           </div>
-          <UsersShoes profilePic={profilePic} shoes={shoes} />
+          <UsersShoes userId={id} profilePic={profilePic} shoes={shoes} />
         </Container>
       </div>
     );

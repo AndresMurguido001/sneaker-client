@@ -224,6 +224,7 @@ export const getShoeQuery = gql`
         numberOfLikes
         photos
         size
+        price
       }
     }
   }
@@ -268,6 +269,34 @@ export const DeleteShoeMutation = gql`
         path
         message
       }
+    }
+  }
+`;
+
+export const AddToCartMutation = gql`
+  mutation($userId: Int!, $shoeId: Int!) {
+    addItem(userId: $userId, shoeId: $shoeId) {
+      model
+      brand
+      size
+      price
+    }
+  }
+`;
+
+export const GetCartQuery = gql`
+  query($userId: Int!) {
+    getCart(userId: $userId) {
+      shoes {
+        id
+        brand
+        model
+        photos
+        price
+        size
+      }
+      total
+      quantity
     }
   }
 `;

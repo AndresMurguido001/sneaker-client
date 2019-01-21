@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Header, Icon } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 import CreateReviewForm from "../Containers/CreateReviewForm";
 //import { Consumer } from "../App";
 import ListOfReviews from "../Containers/ListOfReviews";
@@ -7,7 +7,6 @@ import { AuthConsumer } from "../Context/AuthContext";
 //getReview query
 import { GetShoeReviews } from "../ApolloService/ApolloRequests";
 import { graphql } from "react-apollo";
-import { HeadingSecondary } from "../styles/Home/Home";
 
 const Reviews = ({
   photo,
@@ -28,11 +27,15 @@ const Reviews = ({
               shoeId={shoeId}
               userId={userId}
             />
-		{/*
+            {/*
 			<HeadingSecondary underlined>Reviews</HeadingSecondary>
 		*/}
             <Container style={{ margin: "5rem 0" }}>
-              <ListOfReviews shoeId={shoeId} loading={loading} reviews={getReviews} />
+              <ListOfReviews
+                shoeId={shoeId}
+                loading={loading}
+                reviews={getReviews}
+              />
             </Container>
           </div>
         )}

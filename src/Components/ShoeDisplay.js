@@ -1,10 +1,21 @@
 import React from "react";
-import { Image, Icon, Segment, Card, Header, Button } from "semantic-ui-react";
-// import { Link } from "react-router-dom";
+import {
+  Image,
+  Icon,
+  Segment,
+  Card,
+  Header,
+  Button,
+  Label
+} from "semantic-ui-react";
 import Reviews from "./Reviews";
 import ReactStars from "react-stars";
+import AddToCart from "../Containers/AddToCart";
+import { withRouter } from "react-router-dom";
+import { AuthConsumer } from "../Context/AuthContext";
+// create Add To Cart Button
 
-export default class ShoeDisplay extends React.Component {
+class ShoeDisplay extends React.Component {
   state = {
     reviewModalOpen: false
   };
@@ -14,7 +25,6 @@ export default class ShoeDisplay extends React.Component {
   closeReviewModal = () => this.setState({ reviewModalOpen: false });
   render() {
     let { shoe } = this.props;
-
     const { reviewModalOpen } = this.state;
     return (
       <div style={style.container}>
@@ -64,7 +74,8 @@ export default class ShoeDisplay extends React.Component {
                         src={shoe.owner.profilePic}
                         centered
                         circular
-                        size="small"
+                        floated="right"
+                        size="mini"
                       />
                     ) : (
                       <Icon
@@ -80,7 +91,6 @@ export default class ShoeDisplay extends React.Component {
                       value={shoe.averageRating}
                       edit={false}
                     />
-                    {/* {`(${shoe.reviews.length})`} */}
                   </span>
                 </Segment>
                 <Button
@@ -95,6 +105,15 @@ export default class ShoeDisplay extends React.Component {
                   </Button.Content>
                 </Button>
               </Card.Content>
+              <AuthConsumer>
+                {({ userId }) => (
+                  <AddToCart
+                    price={shoe.price}
+                    shoeId={this.props.match.params.id}
+                    userId={userId}
+                  />
+                )}
+              </AuthConsumer>
             </Card>
           </Segment>
         </Card>
@@ -124,3 +143,4 @@ let style = {
     display: "block"
   }
 };
+export default withRouter(ShoeDisplay);

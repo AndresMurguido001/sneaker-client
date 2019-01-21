@@ -70,7 +70,7 @@ class Shoes extends React.Component {
             SNKRS
           </HeadingPrimary>
         </Container>
-        <Grid style={{ margin: "5rem 3rem" }} columns="4">
+        <Grid style={{ margin: "5rem auto" }} columns="4">
           <ShoeCells />
         </Grid>
       </Section>

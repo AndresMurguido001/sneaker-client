@@ -2,11 +2,14 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import axios from "axios";
 import { graphql, compose } from "react-apollo";
-import { s3SignMutation, uploadProfilePicMutation } from '../ApolloService/ApolloRequests'
+import {
+  s3SignMutation,
+  uploadProfilePicMutation
+} from "../ApolloService/ApolloRequests";
 import moment from "moment";
 import { Button, Form, Header } from "semantic-ui-react";
 import styled from "styled-components";
-import ModalWrap from "../Components/ModalWrap";
+import ModalWrap from "../Components/utils/ModalWrap";
 
 let PreviewImgWrap = styled.div`
   width: 100px;
@@ -133,8 +136,6 @@ class UploadProfilePic extends React.Component {
     );
   }
 }
-
-
 
 export default compose(
   graphql(s3SignMutation, { name: "s3Sign" }),

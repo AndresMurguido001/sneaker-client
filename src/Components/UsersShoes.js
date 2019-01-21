@@ -1,9 +1,9 @@
 import React from "react";
-import { Grid, Header } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import ShoeCell from "./ShoeCell";
 import { HeadingSecondary } from "../styles/Home/Home";
 
-const UsersShoes = ({ profilePic, shoes }) => {
+const UsersShoes = ({ profilePic, shoes, userId }) => {
   if (shoes.length > 0) {
     return (
       <React.Fragment>
@@ -15,6 +15,7 @@ const UsersShoes = ({ profilePic, shoes }) => {
                 key={`shoe-${shoe.model}-${index}`}
                 profileImg={profilePic}
                 shoe={shoe}
+                userId={userId}
                 usersProfile
               />
             );

@@ -10,7 +10,8 @@ import moment from "moment";
 import { Button, Form, Header, Message, Image } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 
-import ModalWrap from "../Components/ModalWrap";
+import ModalWrap from "../Components/utils/ModalWrap";
+
 //Create Component to resize image
 class Upload extends React.Component {
   state = {
