@@ -276,10 +276,16 @@ export const DeleteShoeMutation = gql`
 export const AddToCartMutation = gql`
   mutation($userId: Int!, $shoeId: Int!) {
     addItem(userId: $userId, shoeId: $shoeId) {
-      model
-      brand
-      size
-      price
+      shoes {
+        id
+        brand
+        model
+        photos
+        price
+        size
+      }
+      total
+      quantity
     }
   }
 `;

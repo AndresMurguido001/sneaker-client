@@ -6,7 +6,7 @@ import { AddToCartMutation } from "../ApolloService/ApolloRequests";
 const AddToCart = ({ mutate, shoeId, userId, price }) => {
   let handleClick = async () => {
     let data = await mutate({
-      variables: { userId, shoeId }
+      variables: { userId, shoeId: parseInt(shoeId, 10) }
     });
     console.log(data);
   };

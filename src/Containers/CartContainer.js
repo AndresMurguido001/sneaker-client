@@ -4,6 +4,8 @@ import { Icon, Segment, Dimmer, Loader } from "semantic-ui-react";
 import { GetCartQuery } from "../ApolloService/ApolloRequests";
 import { graphql } from "react-apollo";
 import Cart from "../Components/Cart";
+import gql from "graphql-tag";
+// import memoizeOne from 'memoize-one'
 
 const CartWrapper = styled.div`
   position: fixed;
@@ -25,16 +27,56 @@ const CartWrapper = styled.div`
   box-shadow: -9px 10px 63px 0px rgba(0, 0, 0, 0.75);
 `;
 
+const cartItemAddedSubscription = gql`
+  subscription($cartId: Int!) {
+    newItemAdded(cartId: $cartId) {
+      shoes {
+        id
+        brand
+        model
+        photos
+        price
+        size
+      }
+      total
+      quantity
+    }
+  }
+`;
+
 class CartContainer extends React.Component {
   componentDidMount() {
-    console.log(this.props.data);
+    this.subscribe(this.props.userId);
   }
+
+  componentWillUnmount() {
+    this.subscribe(this.props.userId);
+  }
+
+  subscribe = cartId => {
+    this.props.data.subscribeToMore({
+      document: cartItemAddedSubscription,
+      variables: {
+        cartId
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) {
+          return prev;
+        }
+        return {
+          getCart: subscriptionData.data.newItemAdded
+        };
+      }
+    });
+  };
+
   render() {
     const {
       cartOpen,
       onCloseClick,
       data: { loading, getCart }
     } = this.props;
+
     if (loading) {
       return (
         <div>
