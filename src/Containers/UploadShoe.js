@@ -48,7 +48,7 @@ class Upload extends React.Component {
       console.log("error uploadToS3", err);
     }
   };
-
+  // Make sure this works after setting up nginx
   formatFilename = filename => {
     const date = moment().format("YYYYMMDD");
     const randomString = Math.random()

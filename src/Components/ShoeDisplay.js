@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Image,
-  Icon,
-  Segment,
-  Card,
-  Header,
-  Button,
-  Label
-} from "semantic-ui-react";
+import { Image, Icon, Segment, Card, Header, Button } from "semantic-ui-react";
 import Reviews from "./Reviews";
 import ReactStars from "react-stars";
 import AddToCart from "../Containers/AddToCart";

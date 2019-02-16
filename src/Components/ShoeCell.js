@@ -62,7 +62,7 @@ let style = {
     padding: "10px"
   },
   cardContainer: {
-    margin: "1rem 0"
+    margin: "1rem"
   }
 };
 export default compose(graphql(LikeShoeMutation))(ShoeCell);

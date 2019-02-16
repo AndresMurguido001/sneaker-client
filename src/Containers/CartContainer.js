@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { Icon, Segment, Dimmer, Loader } from "semantic-ui-react";
+import { Segment, Dimmer, Loader } from "semantic-ui-react";
 import { GetCartQuery } from "../ApolloService/ApolloRequests";
 import { graphql } from "react-apollo";
 import Cart from "../Components/Cart";

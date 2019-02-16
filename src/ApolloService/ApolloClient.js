@@ -5,10 +5,10 @@ import { getMainDefinition } from "apollo-utilities";
 import { ApolloLink, split } from "apollo-link";
 import { ApolloClient } from "apollo-client";
 
-const httpLink = new HttpLink({ uri: "http://localhost:8080/graphql" });
+const httpLink = new HttpLink({ uri: `http://${process.env.REACT_APP_SERVER_URL}/graphql` });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:8080/subscriptions",
+  uri: `ws://${process.env.REACT_APP_SERVER_URL}/subscriptions`,
   options: {
     reconnect: true,
     lazy: true,
